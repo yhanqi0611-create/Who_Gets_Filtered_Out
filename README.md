@@ -1,6 +1,10 @@
 # wsc-audit
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/yhanqi0611-create/Who_Gets_Filtered_Out/blob/main/notebooks/colab_runner.ipynb)
+
 Re-run the WenetSpeech-Chuan automatic labelling pipeline on the human-transcribed **WSC-Eval-ASR** set (`ASLP-lab/WSC-Eval`) and audit who gets filtered out.
+
+GitHub: https://github.com/yhanqi0611-create/Who_Gets_Filtered_Out
 
 Code is written to run **unchanged** on:
 
