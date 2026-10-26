@@ -90,6 +90,13 @@ python -m wscaudit {prepare,asr,merge,vote,confidence,cer,markers,calibration,st
 
 `prepare` snapshots `ASLP-lab/WSC-Eval` (`WSC-Eval-ASR/**` only) into `WSC_DATA`, rebuilds wav paths (the shipped `wav.scp` is ignored), and writes `WSC_OUT/manifest.jsonl`. Re-run is safe: Hugging Face resumes. Use `--skip-download` if the files are already there.
 
+Normalisation (NFKC, SenseVoice tags, punctuation, OpenCC t2s, Latin case, whitespace, optional digits/equivalences) lives in `wscaudit.normalize`. Check gold refs with:
+
+```bash
+python -m wscaudit.normalize
+# or: python -m wscaudit.normalize --manifest "$WSC_OUT/manifest.jsonl"
+```
+
 Subcommands after `prepare` are still stubs.
 
 ## Licence / data
