@@ -97,7 +97,15 @@ python -m wscaudit.normalize
 # or: python -m wscaudit.normalize --manifest "$WSC_OUT/manifest.jsonl"
 ```
 
-Subcommands after `prepare` are still stubs.
+SenseVoice:
+
+```bash
+python -m wscaudit asr --model sensevoice --split Hard --limit 20
+# full Hard: drop --limit; full set: --split all
+# writes $WSC_OUT/hyps/sensevoice.jsonl (idempotent) and $WSC_OUT/runtime.csv
+```
+
+FireRed / Qwen3-ASR / Whisper wrappers are still stubs.
 
 ## Licence / data
 

@@ -76,10 +76,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_asr = sub.add_parser("asr", help="Run one recogniser over the manifest")
     _add_common(p_asr)
-    p_asr.add_argument("--model", required=False, help="firered | sensevoice | qwen3asr | whisper")
+    p_asr.add_argument("--model", required=True, help="firered | sensevoice | qwen3asr | whisper")
     p_asr.add_argument("--split", default="all", help="Easy | Hard | all")
     p_asr.add_argument("--device", default="auto")
     p_asr.add_argument("--limit", type=int, default=None)
+    p_asr.add_argument("--batch-size", type=int, default=None)
 
     p_merge = sub.add_parser("merge", help="LLM-GER merge for a pipeline")
     _add_common(p_merge)
@@ -120,6 +121,12 @@ def _apply_hf_home(cfg: dict[str, Any]) -> None:
         os.environ["HF_HOME"] = str(hf_home)
 
 
+def load_models_cfg() -> dict[str, Any]:
+    path = _REPO_ROOT / "configs" / "models.yaml"
+    with path.open(encoding="utf-8") as f:
+        return yaml.safe_load(f) or {}
+
+
 def cmd_prepare(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
     from wscaudit.data import prepare
 
@@ -132,12 +139,40 @@ def cmd_prepare(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
     return 0
 
 
+def cmd_asr(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
+    from wscaudit.asr.base import run_asr
+
+    _apply_hf_home(cfg)
+    if args.model != "sensevoice":
+        return _stub(f"asr --model {args.model}")
+    models = load_models_cfg()
+    asr_cfg = models.get("asr") or {}
+    sv = asr_cfg.get("sensevoice") or {}
+    batch = args.batch_size if args.batch_size is not None else int(sv.get("batch_size") or 64)
+    out_root = Path(cfg["out_root"])
+    run_asr(
+        args.model,
+        out_root / "manifest.jsonl",
+        out_root / "hyps" / f"{args.model}.jsonl",
+        Path(cfg["data_root"]),
+        batch_size=batch,
+        device=args.device,
+        split=args.split,
+        limit=args.limit,
+        asr_cfg=asr_cfg,
+        runtime_csv=out_root / "runtime.csv",
+    )
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     cfg = load_paths(args.config)
     if args.command == "prepare":
         return cmd_prepare(args, cfg)
+    if args.command == "asr":
+        return cmd_asr(args, cfg)
     return _stub(args.command)
 
 
