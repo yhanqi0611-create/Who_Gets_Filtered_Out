@@ -1,0 +1,41 @@
+# Model ids, inference knobs, and shared normalisation.
+# Silent points in Dai et al. 2025 are documented choices, not claimed facts.
+
+normalization:
+  nfkc: true
+  strip_sensevoice_tags: true
+  strip_punctuation: true
+  opencc_t2s: true
+  latin_lower: true
+  strip_whitespace: true
+  arabic_digits_to_cn: true
+  apply_equivalences: false
+
+asr:
+  firered:
+    hf_id: FireRedTeam/FireRedASR-AED-L
+    asr_type: aed
+    beam_size: 3
+    max_seconds: 60
+  sensevoice:
+    hf_id: FunAudioLLM/SenseVoiceSmall
+    language: zh
+    use_itn: false
+    batch_size: 64
+  qwen3asr:
+    hf_id: Qwen/Qwen3-ASR-1.7B
+    dtype: bfloat16
+    max_inference_batch_size: 32
+    max_new_tokens: 256
+  whisper:
+    hf_id: openai/whisper-large-v3
+    batch_size: 16
+    language: chinese
+    task: transcribe
+
+llm:
+  hf_id: Qwen/Qwen3-8B
+  enable_thinking: false
+  temperature: 0.0
+  max_tokens: 256
+  prompt_file: configs/prompt_wsc_approx.txt

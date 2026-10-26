@@ -1,0 +1,20 @@
+# P0 is the main replication (TeleASR substituted by Qwen3-ASR-1.7B).
+# S1/S2 are sensitivity checks. Vote variants are no-LLM ablations.
+P0:
+  recognisers: [firered, sensevoice, qwen3asr]
+  merge: llm
+P0-vote:
+  recognisers: [firered, sensevoice, qwen3asr]
+  merge: vote
+S1:
+  recognisers: [firered, sensevoice, whisper]
+  merge: llm
+S1-vote:
+  recognisers: [firered, sensevoice, whisper]
+  merge: vote
+S2:
+  recognisers: [firered, sensevoice]
+  merge: llm
+S2-vote:
+  recognisers: [firered, sensevoice]
+  merge: vote

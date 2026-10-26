@@ -1,0 +1,4 @@
+# Defaults; override with env vars WSC_DATA, WSC_OUT, HF_HOME.
+data_root: data/WSC-Eval
+out_root: outputs
+hf_home: null

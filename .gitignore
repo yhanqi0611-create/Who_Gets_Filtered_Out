@@ -1,0 +1,16 @@
+outputs/
+data/
+*.wav
+hf_cache/
+.venv*
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
+dist/
+build/
+logs/
+.ipynb_checkpoints/
+third_party/FireRedASR/
+.DS_Store

@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wscaudit"
+version = "0.1.0"
+description = "Audit automatic labels of WenetSpeech-Chuan on WSC-Eval-ASR"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy",
+    "pandas",
+    "pyyaml",
+    "tqdm",
+    "soundfile",
+    "huggingface_hub",
+    "jiwer",
+    "rapidfuzz",
+    "opencc-python-reimplemented",
+    "zhon",
+    "cn2an",
+    "scipy",
+    "statsmodels",
+    "matplotlib",
+    "pytest",
+]
+
+[project.optional-dependencies]
+sensevoice = ["funasr"]
+qwen3asr = ["qwen-asr"]
+whisper = ["transformers", "accelerate"]
+llm = ["vllm", "transformers"]
+dev = ["pytest"]
+
+[project.scripts]
+wscaudit = "wscaudit.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

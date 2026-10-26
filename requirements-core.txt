@@ -1,0 +1,15 @@
+numpy
+pandas
+pyyaml
+tqdm
+soundfile
+huggingface_hub
+jiwer
+rapidfuzz
+opencc-python-reimplemented
+zhon
+cn2an
+scipy
+statsmodels
+matplotlib
+pytest
