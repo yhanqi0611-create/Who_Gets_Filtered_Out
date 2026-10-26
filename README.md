@@ -51,7 +51,7 @@ bash scripts/run_local.sh prepare
 
 `bash scripts/run_local.sh all` runs the full sequence (ASR models need their own venvs if dependencies conflict). Copy `outputs/` back with `rsync`; commit only the small `results/` tables, not wav or JSONL dumps.
 
-Colab: open [`notebooks/colab_runner.ipynb`](notebooks/colab_runner.ipynb) from this GitHub repo (or *File → Upload notebook* in Colab). It clones `Who_Gets_Filtered_Out`, mounts Drive for `WSC_DATA` / `WSC_OUT` / `HF_HOME`, then calls the same CLI.
+Colab: open [`notebooks/colab_runner.ipynb`](notebooks/colab_runner.ipynb) from this GitHub repo (or *File → Upload notebook* in Colab). It clones `Who_Gets_Filtered_Out`, mounts Drive for `WSC_DATA` / `WSC_OUT`, and keeps `HF_HOME` on the local disk (`/content/hf_cache`). Putting the Hugging Face cache on Drive often corrupts SentencePiece `.bpe.model` files.
 
 ## UPPMAX Pelle
 
