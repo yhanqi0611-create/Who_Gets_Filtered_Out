@@ -68,6 +68,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_prepare = sub.add_parser("prepare", help="Download WSC-Eval-ASR and write manifest.jsonl")
     _add_common(p_prepare)
+    p_prepare.add_argument(
+        "--skip-download",
+        action="store_true",
+        help="Use files already under data_root (no Hugging Face snapshot)",
+    )
 
     p_asr = sub.add_parser("asr", help="Run one recogniser over the manifest")
     _add_common(p_asr)
@@ -109,10 +114,30 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _apply_hf_home(cfg: dict[str, Any]) -> None:
+    hf_home = cfg.get("hf_home")
+    if hf_home:
+        os.environ["HF_HOME"] = str(hf_home)
+
+
+def cmd_prepare(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
+    from wscaudit.data import prepare
+
+    _apply_hf_home(cfg)
+    prepare(
+        Path(cfg["data_root"]),
+        Path(cfg["out_root"]),
+        skip_download=args.skip_download,
+    )
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
-    _ = load_paths(args.config)
+    cfg = load_paths(args.config)
+    if args.command == "prepare":
+        return cmd_prepare(args, cfg)
     return _stub(args.command)
 
 

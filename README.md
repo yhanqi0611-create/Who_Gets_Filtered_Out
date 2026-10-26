@@ -88,7 +88,9 @@ python -m wscaudit --help
 python -m wscaudit {prepare,asr,merge,vote,confidence,cer,markers,calibration,stats,report}
 ```
 
-Subcommands after `prepare` are stubs until the later implementation prompts.
+`prepare` snapshots `ASLP-lab/WSC-Eval` (`WSC-Eval-ASR/**` only) into `WSC_DATA`, rebuilds wav paths (the shipped `wav.scp` is ignored), and writes `WSC_OUT/manifest.jsonl`. Re-run is safe: Hugging Face resumes. Use `--skip-download` if the files are already there.
+
+Subcommands after `prepare` are still stubs.
 
 ## Licence / data
 
