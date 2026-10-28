@@ -105,7 +105,17 @@ python -m wscaudit asr --model sensevoice --split Hard --limit 20
 # writes $WSC_OUT/hyps/sensevoice.jsonl (idempotent) and $WSC_OUT/runtime.csv
 ```
 
-FireRed / Qwen3-ASR / Whisper wrappers are still stubs.
+FireRedASR-AED-L (separate env; do not put `HF_HOME` on Google Drive):
+
+```bash
+git clone https://github.com/FireRedTeam/FireRedASR.git third_party/FireRedASR
+pip install -r third_party/FireRedASR/requirements.txt
+python -m wscaudit asr --model firered --split Hard --limit 20 --device auto
+# then drop --limit; then --split Easy
+# writes $WSC_OUT/hyps/firered.jsonl  (batch_size default 8 on T4)
+```
+
+Qwen3-ASR / Whisper wrappers are still stubs.
 
 ## Licence / data
 

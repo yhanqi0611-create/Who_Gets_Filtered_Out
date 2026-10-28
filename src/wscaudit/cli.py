@@ -143,12 +143,17 @@ def cmd_asr(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
     from wscaudit.asr.base import run_asr
 
     _apply_hf_home(cfg)
-    if args.model != "sensevoice":
+    if args.model not in {"sensevoice", "firered"}:
         return _stub(f"asr --model {args.model}")
     models = load_models_cfg()
     asr_cfg = models.get("asr") or {}
-    sv = asr_cfg.get("sensevoice") or {}
-    batch = args.batch_size if args.batch_size is not None else int(sv.get("batch_size") or 64)
+    block = asr_cfg.get(args.model) or {}
+    default_batch = 8 if args.model == "firered" else 64
+    batch = (
+        args.batch_size
+        if args.batch_size is not None
+        else int(block.get("batch_size") or default_batch)
+    )
     out_root = Path(cfg["out_root"])
     run_asr(
         args.model,

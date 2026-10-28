@@ -65,7 +65,9 @@ class SenseVoiceEngine:
             items = list(res)
         return [postprocess_sensevoice(_item_text(it)) for it in items]
 
-    def transcribe_batch(self, wavs: list[str]) -> list[str]:
+    def transcribe_batch(
+        self, wavs: list[str], utt_ids: list[str] | None = None
+    ) -> list[str]:
         if not wavs:
             return []
         texts = self._generate(wavs, min(self.batch_size, len(wavs)))

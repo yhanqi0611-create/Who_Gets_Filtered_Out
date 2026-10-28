@@ -15,7 +15,7 @@ from tqdm import tqdm
 
 from wscaudit.normalize import load_normalization_cfg, normalize
 
-TranscribeBatch = Callable[[list[str]], list[str]]
+TranscribeBatch = Callable[..., list[str]]
 
 
 def resolve_device(device: str) -> str:
@@ -113,8 +113,13 @@ def load_transcriber(model_name: str, device: str, asr_cfg: dict[str, Any]) -> T
 
         engine = SenseVoiceEngine(device=device, cfg=asr_cfg.get("sensevoice") or {})
         return engine.transcribe_batch
+    if model_name == "firered":
+        from wscaudit.asr.firered import FireRedEngine
+
+        engine = FireRedEngine(device=device, cfg=asr_cfg.get("firered") or {})
+        return engine.transcribe_batch
     raise NotImplementedError(
-        f"asr model {model_name!r} is not implemented yet (sensevoice only for now)"
+        f"asr model {model_name!r} is not implemented yet (sensevoice|firered)"
     )
 
 
@@ -161,11 +166,13 @@ def run_asr(
         for i in tqdm(range(0, len(todo), batch_size), desc=f"asr:{model_name}", leave=True):
             batch = todo[i : i + batch_size]
             wavs: list[str] = []
+            utt_ids: list[str] = []
             for row in batch:
                 wav_path = resolve_wav(data_root, row["wav"])
                 wavs.append(str(wav_path))
+                utt_ids.append(row["utt_id"])
             b0 = time.perf_counter()
-            hyps = transcribe_batch(wavs)
+            hyps = transcribe_batch(wavs, utt_ids)
             batch_s = time.perf_counter() - b0
             if len(hyps) != len(batch):
                 raise RuntimeError(

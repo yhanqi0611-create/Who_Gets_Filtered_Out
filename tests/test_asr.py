@@ -4,11 +4,12 @@ import json
 from pathlib import Path
 
 from wscaudit.asr.base import run_asr
+from wscaudit.asr.firered import _texts_in_order
 from wscaudit.data import prepare
 from wscaudit.normalize import normalize
 
 
-def _tagged(wavs: list[str]) -> list[str]:
+def _tagged(wavs: list[str], utt_ids: list[str] | None = None) -> list[str]:
     return ["<|zh|><|NEUTRAL|>巴适"] * len(wavs)
 
 
@@ -73,3 +74,11 @@ def test_run_asr_idempotent_skips(tmp_path: Path) -> None:
     run_asr(**kwargs)
     lines = hyps.read_text(encoding="utf-8").strip().splitlines()
     assert len(lines) == 3
+
+
+def test_firered_aligns_results_by_uttid() -> None:
+    texts = _texts_in_order(
+        ["u2", "u1"],
+        [{"uttid": "u1", "text": "一"}, {"uttid": "u2", "text": "二"}],
+    )
+    assert texts == ["二", "一"]
