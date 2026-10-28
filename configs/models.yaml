@@ -31,8 +31,10 @@ asr:
   qwen3asr:
     hf_id: Qwen/Qwen3-ASR-1.7B
     dtype: bfloat16
+    backend: transformers
     max_inference_batch_size: 32
     max_new_tokens: 256
+    batch_size: 8
   whisper:
     hf_id: openai/whisper-large-v3
     batch_size: 16

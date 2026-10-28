@@ -3,8 +3,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from wscaudit.asr.base import run_asr
+from wscaudit.asr.base import coerce_hyp, run_asr
 from wscaudit.asr.firered import _texts_in_order
+from wscaudit.asr.qwen3asr import _item_text_lang
 from wscaudit.data import prepare
 from wscaudit.normalize import normalize
 
@@ -74,6 +75,13 @@ def test_run_asr_idempotent_skips(tmp_path: Path) -> None:
     run_asr(**kwargs)
     lines = hyps.read_text(encoding="utf-8").strip().splitlines()
     assert len(lines) == 3
+
+
+def test_coerce_hyp_and_qwen_item() -> None:
+    assert coerce_hyp("巴适") == ("巴适", None)
+    assert coerce_hyp({"text": "巴适", "language": "Chinese"}) == ("巴适", "Chinese")
+    text, lang = _item_text_lang(type("R", (), {"text": "好", "language": "Chinese"})())
+    assert text == "好" and lang == "Chinese"
 
 
 def test_firered_aligns_results_by_uttid() -> None:

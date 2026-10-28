@@ -81,6 +81,11 @@ def build_parser() -> argparse.ArgumentParser:
     p_asr.add_argument("--device", default="auto")
     p_asr.add_argument("--limit", type=int, default=None)
     p_asr.add_argument("--batch-size", type=int, default=None)
+    p_asr.add_argument(
+        "--backend",
+        default=None,
+        help="qwen3asr only: transformers (default) or vllm",
+    )
 
     p_merge = sub.add_parser("merge", help="LLM-GER merge for a pipeline")
     _add_common(p_merge)
@@ -143,12 +148,15 @@ def cmd_asr(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
     from wscaudit.asr.base import run_asr
 
     _apply_hf_home(cfg)
-    if args.model not in {"sensevoice", "firered"}:
+    if args.model not in {"sensevoice", "firered", "qwen3asr"}:
         return _stub(f"asr --model {args.model}")
     models = load_models_cfg()
     asr_cfg = models.get("asr") or {}
-    block = asr_cfg.get(args.model) or {}
-    default_batch = 8 if args.model == "firered" else 64
+    block = dict(asr_cfg.get(args.model) or {})
+    if args.model == "qwen3asr" and args.backend:
+        block["backend"] = args.backend
+        asr_cfg = {**asr_cfg, "qwen3asr": block}
+    default_batch = 8 if args.model in {"firered", "qwen3asr"} else 64
     batch = (
         args.batch_size
         if args.batch_size is not None

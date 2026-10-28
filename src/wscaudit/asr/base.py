@@ -15,7 +15,7 @@ from tqdm import tqdm
 
 from wscaudit.normalize import load_normalization_cfg, normalize
 
-TranscribeBatch = Callable[..., list[str]]
+TranscribeBatch = Callable[..., list[Any]]
 
 
 def resolve_device(device: str) -> str:
@@ -107,6 +107,17 @@ def _upsert_runtime_csv(path: Path, record: dict[str, Any]) -> None:
         writer.writerows(rows)
 
 
+def coerce_hyp(raw: Any) -> tuple[str, str | None]:
+    """Normalise engine output to (text, language)."""
+    if raw is None:
+        return "", None
+    if isinstance(raw, dict):
+        text = raw.get("text") if raw.get("text") is not None else raw.get("raw")
+        lang = raw.get("language")
+        return ("" if text is None else str(text), None if lang is None else str(lang))
+    return str(raw), None
+
+
 def load_transcriber(model_name: str, device: str, asr_cfg: dict[str, Any]) -> TranscribeBatch:
     if model_name == "sensevoice":
         from wscaudit.asr.sensevoice import SenseVoiceEngine
@@ -118,8 +129,13 @@ def load_transcriber(model_name: str, device: str, asr_cfg: dict[str, Any]) -> T
 
         engine = FireRedEngine(device=device, cfg=asr_cfg.get("firered") or {})
         return engine.transcribe_batch
+    if model_name == "qwen3asr":
+        from wscaudit.asr.qwen3asr import Qwen3ASREngine
+
+        engine = Qwen3ASREngine(device=device, cfg=asr_cfg.get("qwen3asr") or {})
+        return engine.transcribe_batch
     raise NotImplementedError(
-        f"asr model {model_name!r} is not implemented yet (sensevoice|firered)"
+        f"asr model {model_name!r} is not implemented yet (sensevoice|firered|qwen3asr)"
     )
 
 
@@ -180,17 +196,19 @@ def run_asr(
                 )
             per_utt = batch_s / max(len(batch), 1)
             for row, raw in zip(batch, hyps, strict=True):
-                raw = "" if raw is None else str(raw)
-                if not raw.strip():
+                text, lang = coerce_hyp(raw)
+                if not text.strip():
                     n_empty += 1
                     print(f"warning: empty raw for {row['utt_id']}", flush=True)
                 rec = {
                     "utt_id": row["utt_id"],
                     "model": model_name,
-                    "raw": raw,
-                    "norm": normalize(raw, norm_cfg),
+                    "raw": text,
+                    "norm": normalize(text, norm_cfg),
                     "runtime_s": per_utt,
                 }
+                if lang:
+                    rec["language"] = lang
                 fout.write(json.dumps(rec, ensure_ascii=False) + "\n")
                 n_written += 1
             fout.flush()

@@ -115,7 +115,16 @@ python -m wscaudit asr --model firered --split Hard --limit 20 --device auto
 # writes $WSC_OUT/hyps/firered.jsonl  (batch_size default 8 on T4)
 ```
 
-Qwen3-ASR / Whisper wrappers are still stubs.
+Qwen3-ASR-1.7B (TeleASR substitute; new Colab runtime; `HF_HOME=/content/hf_cache`):
+
+```bash
+pip install -e . -r requirements-qwen3asr.txt
+python -m wscaudit asr --model qwen3asr --split Hard --limit 20 --device auto
+# optional: --backend vllm  (needs qwen-asr[vllm]; T4 usually stays on transformers)
+# writes $WSC_OUT/hyps/qwen3asr.jsonl
+```
+
+T4 has no native bfloat16; the wrapper falls back to float16. Whisper is still a stub.
 
 ## Licence / data
 
