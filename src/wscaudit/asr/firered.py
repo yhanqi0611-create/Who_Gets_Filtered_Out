@@ -22,6 +22,23 @@ DEFAULT_DECODE = {
 }
 
 
+def _allow_full_torch_load() -> None:
+    """FireRed checkpoints pickle ``argparse.Namespace``; PyTorch ≥2.6 defaults to weights_only=True."""
+    import torch
+
+    if getattr(torch.load, "_wscaudit_full_load", False):
+        return
+
+    orig = torch.load
+
+    def _load(*args, **kwargs):  # type: ignore[no-untyped-def]
+        kwargs.setdefault("weights_only", False)
+        return orig(*args, **kwargs)
+
+    _load._wscaudit_full_load = True  # type: ignore[attr-defined]
+    torch.load = _load  # type: ignore[assignment]
+
+
 def ensure_firered_on_path() -> Path:
     if not _FIRERED_SRC.is_dir():
         raise FileNotFoundError(
@@ -78,6 +95,7 @@ class FireRedEngine:
             self.model_dir = str(model_dir)
         else:
             self.model_dir = snapshot_download(self.hf_id)
+        _allow_full_torch_load()
         self.model = FireRedAsr.from_pretrained(self.asr_type, self.model_dir)
 
     def transcribe_batch(
