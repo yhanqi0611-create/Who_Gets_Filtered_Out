@@ -1,2 +1,39 @@
-# STUDENT: verify/extend to ~30 forms; fill Mandarin equivalents
-form	mandarin_equivalents	type	notes
+# Fill to ~30–50 rows. One dialect↔mandarin pair per row. Uncertain forms: delete, do not guess.
+# Particles with no stable Mandarin: leave mandarin empty and write particle in note.
+# Match whole tokens / longest-first; do not bare-substring-match short forms (莫/幺/嘿).
+dialect	mandarin	note
+啥子	什么	疑问代词
+没得	没有	
+莫得	没有	预研形式
+啷个	怎么	预研写法
+浪个	怎么	啷个异写
+咋个	怎么	
+巴适	舒服	也可对「好」
+安逸	舒服	
+晓得	知道	
+耍	玩	
+娃儿	孩子	
+幺儿	儿子	也可对「小孩」
+要得	可以	表同意
+莫		否定祈使；整词匹配，mandarin 视语境为「不要」
+噻		particle
+撒		particle
+嘞		particle
+嘿	很	程度副词（如「嘿安逸」）；勿裸子串
+哦豁	糟了	也可对「完了」
+打整	收拾	
+扯把子	吹牛	
+鬼儿	点子	口语「花样」
+瓜娃子	傻瓜	勿用单字「瓜」
+撇脱	容易	也可对「干脆」
+老汉儿	爸爸	口语称呼；「老汉」另义勿混
+幺	小	仅整词；易误伤时可不启用
+鼓到	强迫	
+龟儿子		insult；不对译粗口
+老子	我	自称（语境依赖）
+神戳戳	神经兮兮	
+脑壳昏	反应迟钝	
+孃孃	阿姨	对与母亲年纪相仿的女性
+假巴意思	假惺惺	
+一哈	一下	「稍微/一下」，非「全部」
+牙尖	挑剔	
