@@ -117,6 +117,13 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_markers = sub.add_parser("markers", help="Dialect marker loss/insertion")
     _add_common(p_markers)
+    p_markers.add_argument("--pipeline", default="P0")
+    p_markers.add_argument(
+        "--markers",
+        type=Path,
+        default=None,
+        help="TSV lexicon (default: resources/markers.tsv)",
+    )
 
     p_cal = sub.add_parser("calibration", help="ECE, reliability diagrams, filtering bias")
     _add_common(p_cal)
@@ -227,6 +234,23 @@ def cmd_cer(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
     return 0
 
 
+def cmd_markers(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
+    from wscaudit.metrics.markers import DEFAULT_MARKERS, run_markers
+
+    out_root = Path(cfg["out_root"])
+    vote_path = out_root / "merged" / f"vote_{args.pipeline}.jsonl"
+    if not vote_path.is_file():
+        print(f"missing vote file: {vote_path}", file=sys.stderr)
+        return 2
+    run_markers(
+        out_root / "manifest.jsonl",
+        vote_path,
+        markers_path=args.markers or DEFAULT_MARKERS,
+        metrics_dir=out_root / "metrics",
+    )
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -239,6 +263,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_vote(args, cfg)
     if args.command == "cer":
         return cmd_cer(args, cfg)
+    if args.command == "markers":
+        return cmd_markers(args, cfg)
     return _stub(args.command)
 
 

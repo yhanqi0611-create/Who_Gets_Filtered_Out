@@ -146,6 +146,16 @@ python -m wscaudit cer --systems sensevoice,firered,qwen3asr,vote_P0
 
 Micro CER = Σ Levenshtein / Σ ref length on frozen `normalize()` text. Empty recogniser `norm` counts as a full deletion (CER 1.0 if the ref is non-empty) and stays in n. vote_P0 is also split by pre-registered confidence bins `<0.6`, `0.6–0.9`, `≥0.9`. Equivalences are not applied.
 
+Dialect markers (CPU; RQ1 retention / RQ3 confidence pass rates on vote_P0):
+
+```bash
+python -m wscaudit markers --pipeline P0
+# reads resources/markers.tsv (student lexicon) and $WSC_OUT/merged/vote_P0.jsonl
+# writes $WSC_OUT/metrics/markers_per_utt.jsonl and markers_summary.json
+```
+
+Matching is longest-first exact scan on already-normalised text. Length-1 forms (莫 / 幺 / 嘿) do not match when the previous character is CJK (so 西瓜 does not fire 瓜). Automatic Mandarinization / over-dialect counts are **candidates for human error-taxonomy review**, not gold.
+
 T4 has no native bfloat16; the Qwen3-ASR wrapper falls back to float16. Whisper is still a stub.
 
 ## Licence / data
