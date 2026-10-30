@@ -109,6 +109,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_cer = sub.add_parser("cer", help="Character error rates")
     _add_common(p_cer)
+    p_cer.add_argument(
+        "--systems",
+        default="sensevoice,firered,qwen3asr,vote_P0",
+        help="Comma-separated systems (hyps/<name>.jsonl or merged/<name>.jsonl for vote_*)",
+    )
 
     p_markers = sub.add_parser("markers", help="Dialect marker loss/insertion")
     _add_common(p_markers)
@@ -208,6 +213,20 @@ def cmd_vote(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
     return 0
 
 
+def cmd_cer(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
+    from wscaudit.metrics.cer import DEFAULT_SYSTEMS, run_cer
+
+    out_root = Path(cfg["out_root"])
+    systems = tuple(n.strip() for n in str(args.systems).split(",") if n.strip()) or DEFAULT_SYSTEMS
+    run_cer(
+        out_root / "manifest.jsonl",
+        out_root,
+        systems=systems,
+        metrics_dir=out_root / "metrics",
+    )
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -218,6 +237,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_asr(args, cfg)
     if args.command == "vote":
         return cmd_vote(args, cfg)
+    if args.command == "cer":
+        return cmd_cer(args, cfg)
     return _stub(args.command)
 
 

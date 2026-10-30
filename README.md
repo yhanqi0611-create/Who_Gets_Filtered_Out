@@ -135,6 +135,17 @@ python -m wscaudit vote --pipeline P0 --hyps sensevoice,firered,qwen3asr --split
 
 Alignment is rapidfuzz Levenshtein (equal sub/ins/del) on characters, centre-star for 3 strings. Empty `norm` (Qwen3, 78 utts) is absent, so that utterance votes over the other two. Column ties: SenseVoice, then FireRed, then Qwen3. LLM-GER is not used.
 
+CER tables (CPU; paper table, not the ASR runner `cer_hard`):
+
+```bash
+python -m wscaudit cer --systems sensevoice,firered,qwen3asr,vote_P0
+# writes $WSC_OUT/metrics/cer_overall.{csv,json}
+#         $WSC_OUT/metrics/cer_vote_conf.{csv,json}
+#         $WSC_OUT/metrics/cer_per_utt.jsonl
+```
+
+Micro CER = Σ Levenshtein / Σ ref length on frozen `normalize()` text. Empty recogniser `norm` counts as a full deletion (CER 1.0 if the ref is non-empty) and stays in n. vote_P0 is also split by pre-registered confidence bins `<0.6`, `0.6–0.9`, `≥0.9`. Equivalences are not applied.
+
 T4 has no native bfloat16; the Qwen3-ASR wrapper falls back to float16. Whisper is still a stub.
 
 ## Licence / data
