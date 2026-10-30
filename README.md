@@ -124,7 +124,18 @@ python -m wscaudit asr --model qwen3asr --split Hard --limit 20 --device auto
 # writes $WSC_OUT/hyps/qwen3asr.jsonl
 ```
 
-T4 has no native bfloat16; the wrapper falls back to float16. Whisper is still a stub.
+Character-level majority vote (primary label after supervisor review; CPU only):
+
+```bash
+python -m wscaudit vote --pipeline P0 --hyps sensevoice,firered,qwen3asr --split Hard --limit 50
+python -m wscaudit vote --pipeline P0 --hyps sensevoice,firered,qwen3asr --split Hard
+python -m wscaudit vote --pipeline P0 --hyps sensevoice,firered,qwen3asr --split Easy
+# writes $WSC_OUT/merged/vote_P0.jsonl and vote_P0.summary.json
+```
+
+Alignment is rapidfuzz Levenshtein (equal sub/ins/del) on characters, centre-star for 3 strings. Empty `norm` (Qwen3, 78 utts) is absent, so that utterance votes over the other two. Column ties: SenseVoice, then FireRed, then Qwen3. LLM-GER is not used.
+
+T4 has no native bfloat16; the Qwen3-ASR wrapper falls back to float16. Whisper is still a stub.
 
 ## Licence / data
 

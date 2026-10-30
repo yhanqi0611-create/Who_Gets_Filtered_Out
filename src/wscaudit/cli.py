@@ -92,9 +92,16 @@ def build_parser() -> argparse.ArgumentParser:
     p_merge.add_argument("--pipeline", default="P0")
     p_merge.add_argument("--device", default="auto")
 
-    p_vote = sub.add_parser("vote", help="ROVER-style majority vote (no LLM)")
+    p_vote = sub.add_parser("vote", help="Character-level majority vote (no LLM)")
     _add_common(p_vote)
-    p_vote.add_argument("--pipeline", default="P0-vote")
+    p_vote.add_argument("--pipeline", default="P0")
+    p_vote.add_argument(
+        "--hyps",
+        default="sensevoice,firered,qwen3asr",
+        help="Comma-separated hyp JSONL stems under out_root/hyps/",
+    )
+    p_vote.add_argument("--split", default="all", help="Easy | Hard | all")
+    p_vote.add_argument("--limit", type=int, default=None)
 
     p_conf = sub.add_parser("confidence", help="Position-wise confidence variants A/B")
     _add_common(p_conf)
@@ -178,6 +185,29 @@ def cmd_asr(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
     return 0
 
 
+def cmd_vote(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
+    from wscaudit.merge.vote import DEFAULT_HYPS, run_vote
+
+    out_root = Path(cfg["out_root"])
+    names = tuple(n.strip() for n in str(args.hyps).split(",") if n.strip()) or DEFAULT_HYPS
+    hyp_paths = {name: out_root / "hyps" / f"{name}.jsonl" for name in names}
+    missing = [p for p in hyp_paths.values() if not p.is_file()]
+    if missing:
+        print("missing hyp files:", *missing, sep="\n  ", file=sys.stderr)
+        return 2
+    stem = f"vote_{args.pipeline}"
+    run_vote(
+        out_root / "manifest.jsonl",
+        hyp_paths,
+        out_root / "merged" / f"{stem}.jsonl",
+        out_root / "merged" / f"{stem}.summary.json",
+        split=args.split,
+        limit=args.limit,
+        hyp_order=names,
+    )
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -186,6 +216,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_prepare(args, cfg)
     if args.command == "asr":
         return cmd_asr(args, cfg)
+    if args.command == "vote":
+        return cmd_vote(args, cfg)
     return _stub(args.command)
 
 
