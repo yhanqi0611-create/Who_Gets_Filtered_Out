@@ -265,6 +265,8 @@ def run_markers(
     vote_path: Path,
     markers_path: Path | None = None,
     metrics_dir: Path | None = None,
+    merge_existing: bool = True,
+    system: str | None = None,
 ) -> dict[str, Any]:
     pairs = load_markers(markers_path or DEFAULT_MARKERS)
     scan = _scan_entries(pairs)
@@ -288,10 +290,11 @@ def run_markers(
     p09 = _blank_pass()
     p06 = _blank_pass()
 
+    system_name = system or vote_path.stem
     out_path = metrics_dir / "markers_per_utt.jsonl"
+    new_rows: list[dict[str, Any]] = []
     n = 0
-    with out_path.open("w", encoding="utf-8") as fout:
-        for man in manifest:
+    for man in manifest:
             utt_id = man["utt_id"]
             split = str(man.get("split") or "")
             ref = normalize(str(man.get("ref") or ""), norm_cfg)
@@ -305,9 +308,12 @@ def run_markers(
             rec = {
                 "utt_id": utt_id,
                 "split": split,
+                "system": system_name,
                 "conf": conf,
                 "ref_dialect": scored["ref_dialect"],
                 "hyp_dialect": scored["hyp_dialect"],
+                "n_ref_dialect": scored["n_ref_dialect"],
+                "n_retained": scored["n_retained"],
                 "mandarinization_n": scored["mandarinization_n"],
                 "over_dialect_n": scored["over_dialect_n"],
                 "retained_token_frac": scored["retained_token_frac"],
@@ -315,7 +321,7 @@ def run_markers(
                 "pass_0.9": pass_09,
                 "pass_0.6": pass_06,
             }
-            fout.write(json.dumps(rec, ensure_ascii=False) + "\n")
+            new_rows.append(rec)
             n += 1
 
             splits_here = ["All"] + ([split] if split in ("Easy", "Hard") else [])
@@ -338,6 +344,17 @@ def run_markers(
                 p09[group]["n_pass"] += 1
             if pass_06:
                 p06[group]["n_pass"] += 1
+
+    kept: list[dict[str, Any]] = []
+    if merge_existing and out_path.is_file():
+        kept = [
+            r
+            for r in load_jsonl(out_path)
+            if (r.get("system") or "vote_P0") != system_name
+        ]
+    with out_path.open("w", encoding="utf-8") as fout:
+        for rec in kept + new_rows:
+            fout.write(json.dumps(rec, ensure_ascii=False) + "\n")
 
     def _fin_tok(cell: dict[str, Any]) -> dict[str, Any]:
         out = dict(cell)
@@ -369,15 +386,20 @@ def run_markers(
         "over_dialect_n": dict(over),
         "pass_0.9": _final_pass(p09),
         "pass_0.6": _final_pass(p06),
+        "system": system_name,
         "note": (
             "mandarinization_n / over_dialect_n are automatic candidates for human "
             "error-taxonomy check, not gold. Matching is longest-first; len-1 forms "
             "require a non-CJK previous character."
         ),
     }
-    sum_path = metrics_dir / "markers_summary.json"
+    sum_path = metrics_dir / f"markers_summary_{system_name}.json"
     sum_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if system_name == "vote_P0":
+        (metrics_dir / "markers_summary.json").write_text(
+            json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
     print(json.dumps(summary, ensure_ascii=False, indent=2))
-    print(f"wrote {n} rows -> {out_path}")
+    print(f"wrote {n} {system_name} rows ({len(kept)} other systems kept) -> {out_path}")
     print(f"wrote summary -> {sum_path}")
     return summary

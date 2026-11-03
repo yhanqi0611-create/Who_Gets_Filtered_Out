@@ -116,7 +116,14 @@ def join_rows(
         for r in load_jsonl(cer_path)
         if r.get("system") == system and "utt_id" in r
     }
-    marks = {r["utt_id"]: r for r in load_jsonl(markers_path) if "utt_id" in r}
+    marks = {}
+    for r in load_jsonl(markers_path):
+        if "utt_id" not in r:
+            continue
+        row_sys = r.get("system") or "vote_P0"
+        if row_sys != system:
+            continue
+        marks[r["utt_id"]] = r
     missing: list[str] = []
     extra_vote = sorted(set(votes) - set(cers) | set(votes) - set(marks))
     extra_cer = sorted(set(cers) - set(votes) | set(cers) - set(marks))

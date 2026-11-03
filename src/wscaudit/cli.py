@@ -114,6 +114,11 @@ def build_parser() -> argparse.ArgumentParser:
         default="sensevoice,firered,qwen3asr,vote_P0",
         help="Comma-separated systems (hyps/<name>.jsonl or merged/<name>.jsonl for vote_*)",
     )
+    p_cer.add_argument(
+        "--no-merge",
+        action="store_true",
+        help="Rewrite cer_per_utt.jsonl with only these systems (default keeps other systems)",
+    )
 
     p_markers = sub.add_parser("markers", help="Dialect marker loss/insertion")
     _add_common(p_markers)
@@ -137,6 +142,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_stats = sub.add_parser("stats", help="Bootstrap, permutation tests, logistic regression")
     _add_common(p_stats)
+    p_stats.add_argument("--seed", type=int, default=20261103)
+    p_stats.add_argument("--B", type=int, default=10_000, dest="n_boot")
+    p_stats.add_argument("--expected-n", type=int, default=8373)
 
     p_report = sub.add_parser("report", help="Comparison tables and provenance")
     _add_common(p_report)
@@ -237,6 +245,7 @@ def cmd_cer(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
         out_root,
         systems=systems,
         metrics_dir=out_root / "metrics",
+        merge_existing=not args.no_merge,
     )
     return 0
 
@@ -285,6 +294,24 @@ def cmd_calibration(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
     return 0
 
 
+def cmd_stats(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
+    from wscaudit.stats.run import StatsJoinError, run_stats
+
+    out_root = Path(cfg["out_root"])
+    try:
+        run_stats(
+            out_root,
+            out_root / "metrics",
+            expected_n=args.expected_n,
+            B=args.n_boot,
+            seed=args.seed,
+        )
+    except StatsJoinError as exc:
+        print(str(exc), file=sys.stderr)
+        return 2
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -301,6 +328,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_markers(args, cfg)
     if args.command == "calibration":
         return cmd_calibration(args, cfg)
+    if args.command == "stats":
+        return cmd_stats(args, cfg)
     return _stub(args.command)
 
 

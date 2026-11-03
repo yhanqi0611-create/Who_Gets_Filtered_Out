@@ -167,6 +167,18 @@ python -m wscaudit calibration --pipeline P0
 
 `acc = 1 − min(CER, 1)` (clip insertions only for ECE). Primary ECE uses bins `[0.0,0.6)`, `[0.6,0.9)`, `[0.9,1.0]`. Ten equal-width bins are a sensitivity check. Spearman ρ is reported for conf vs CER (expect negative) and conf vs acc.
 
+Statistics (CPU; Prompt 12). S2 vote is a two-recogniser sensitivity (SenseVoice+FireRed). Do not overwrite P0 JSONL rows.
+
+```bash
+python -m wscaudit vote --pipeline S2 --hyps sensevoice,firered
+python -m wscaudit cer --systems vote_S2
+python -m wscaudit markers --pipeline S2
+python -m wscaudit stats --seed 20261103 --B 10000
+# writes $WSC_OUT/metrics/stats_{summary.json,table.csv,report.md}
+```
+
+`cer --systems vote_S2` merges into `cer_per_utt.jsonl` (keeps P0). Bootstrap B=10,000, seed 20261103, stratified by split for All. Holm on the primary family only.
+
 T4 has no native bfloat16; the Qwen3-ASR wrapper falls back to float16. Whisper is still a stub.
 
 ## Licence / data

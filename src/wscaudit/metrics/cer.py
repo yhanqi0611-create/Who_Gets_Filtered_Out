@@ -122,6 +122,7 @@ def run_cer(
     out_root: Path,
     systems: Iterable[str] = DEFAULT_SYSTEMS,
     metrics_dir: Path | None = None,
+    merge_existing: bool = True,
 ) -> dict[str, Any]:
     systems = tuple(systems) or DEFAULT_SYSTEMS
     metrics_dir = metrics_dir or (out_root / "metrics")
@@ -151,37 +152,46 @@ def run_cer(
     }
 
     per_utt_path = metrics_dir / "cer_per_utt.jsonl"
-    n_rows = 0
+    new_rows: list[dict[str, Any]] = []
+    for man in manifest:
+        utt_id = man["utt_id"]
+        split = str(man.get("split") or "")
+        ref_norm = normalize(str(man.get("ref") or ""), norm_cfg)
+        ref_len = len(ref_norm)
+        for system in systems:
+            hyp, conf = _system_hyp(system, indexed[system].get(utt_id))
+            distance, cer, empty = utt_distance_cer(hyp, ref_norm)
+            rec: dict[str, Any] = {
+                "utt_id": utt_id,
+                "split": split,
+                "system": system,
+                "ref_len": ref_len,
+                "distance": distance,
+                "cer": round(cer, 6),
+                "empty_hyp": empty,
+            }
+            if system.startswith("vote"):
+                rec["conf"] = conf
+            new_rows.append(rec)
+            _add(overall[system]["All"], distance, ref_len, empty)
+            if split in overall[system]:
+                _add(overall[system][split], distance, ref_len, empty)
+            if system.startswith("vote"):
+                b = conf_bin(conf)
+                if b is not None:
+                    _add(vote_bins[b]["All"], distance, ref_len, empty)
+                    if split in vote_bins[b]:
+                        _add(vote_bins[b][split], distance, ref_len, empty)
+
+    kept: list[dict[str, Any]] = []
+    if merge_existing and per_utt_path.is_file():
+        sysset = set(systems)
+        kept = [r for r in load_jsonl(per_utt_path) if r.get("system") not in sysset]
+    all_rows = kept + new_rows
     with per_utt_path.open("w", encoding="utf-8") as fout:
-        for man in manifest:
-            utt_id = man["utt_id"]
-            split = str(man.get("split") or "")
-            ref_norm = normalize(str(man.get("ref") or ""), norm_cfg)
-            ref_len = len(ref_norm)
-            for system in systems:
-                hyp, conf = _system_hyp(system, indexed[system].get(utt_id))
-                distance, cer, empty = utt_distance_cer(hyp, ref_norm)
-                rec: dict[str, Any] = {
-                    "utt_id": utt_id,
-                    "split": split,
-                    "system": system,
-                    "ref_len": ref_len,
-                    "distance": distance,
-                    "cer": round(cer, 6),
-                }
-                if system.startswith("vote"):
-                    rec["conf"] = conf
-                fout.write(json.dumps(rec, ensure_ascii=False) + "\n")
-                n_rows += 1
-                _add(overall[system]["All"], distance, ref_len, empty)
-                if split in overall[system]:
-                    _add(overall[system][split], distance, ref_len, empty)
-                if system.startswith("vote"):
-                    b = conf_bin(conf)
-                    if b is not None:
-                        _add(vote_bins[b]["All"], distance, ref_len, empty)
-                        if split in vote_bins[b]:
-                            _add(vote_bins[b][split], distance, ref_len, empty)
+        for rec in all_rows:
+            fout.write(json.dumps(rec, ensure_ascii=False) + "\n")
+    n_rows = len(all_rows)
 
     overall_out = {
         s: {sp: _finalise(overall[s][sp]) for sp in SPLITS} for s in systems
@@ -210,12 +220,26 @@ def run_cer(
         json.dumps(summary, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
-    _write_overall_csv(metrics_dir / "cer_overall.csv", systems, overall_out)
+    file_systems = list(dict.fromkeys(r.get("system") for r in all_rows if r.get("system")))
+    file_overall: dict[str, dict[str, dict[str, Any]]] = {
+        s: {sp: _blank_cell() for sp in SPLITS} for s in file_systems
+    }
+    for rec in all_rows:
+        s = rec.get("system")
+        if s not in file_overall:
+            continue
+        split = str(rec.get("split") or "")
+        empty = bool(rec.get("empty_hyp", False))
+        _add(file_overall[s]["All"], int(rec["distance"]), int(rec["ref_len"]), empty)
+        if split in file_overall[s]:
+            _add(file_overall[s][split], int(rec["distance"]), int(rec["ref_len"]), empty)
+    file_overall_out = {s: {sp: _finalise(file_overall[s][sp]) for sp in SPLITS} for s in file_systems}
+    _write_overall_csv(metrics_dir / "cer_overall.csv", file_systems, file_overall_out)
     _write_bins_csv(metrics_dir / "cer_vote_conf.csv", bins_out)
     print(_format_overall(systems, overall_out))
     print()
     print(_format_bins(bins_out))
-    print(f"wrote {n_rows} per-utt rows -> {per_utt_path}")
+    print(f"wrote {n_rows} per-utt rows ({len(new_rows)} new, {len(kept)} kept) -> {per_utt_path}")
     return summary
 
 
