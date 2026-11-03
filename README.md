@@ -156,6 +156,17 @@ python -m wscaudit markers --pipeline P0
 
 Matching is longest-first exact scan on already-normalised text. Length-1 forms (莫 / 幺 / 嘿) do not match when the previous character is CJK (so 西瓜 does not fire 瓜). Automatic Mandarinization / over-dialect counts are **candidates for human error-taxonomy review**, not gold.
 
+Calibration of vote_P0 confidence (CPU; RQ2). Joins vote `conf`, `cer_per_utt` (`system=vote_P0`), and `has_dialect_ref`; aborts unless n=8373.
+
+```bash
+python -m wscaudit calibration --pipeline P0
+# writes $WSC_OUT/metrics/calibration_summary.json
+#         $WSC_OUT/metrics/calibration_bins.csv
+#         $WSC_OUT/metrics/figs/reliability_{All,Easy,Hard}.png
+```
+
+`acc = 1 − min(CER, 1)` (clip insertions only for ECE). Primary ECE uses bins `[0.0,0.6)`, `[0.6,0.9)`, `[0.9,1.0]`. Ten equal-width bins are a sensitivity check. Spearman ρ is reported for conf vs CER (expect negative) and conf vs acc.
+
 T4 has no native bfloat16; the Qwen3-ASR wrapper falls back to float16. Whisper is still a stub.
 
 ## Licence / data

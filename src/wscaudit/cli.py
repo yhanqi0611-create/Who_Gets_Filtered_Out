@@ -127,6 +127,13 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_cal = sub.add_parser("calibration", help="ECE, reliability diagrams, filtering bias")
     _add_common(p_cal)
+    p_cal.add_argument("--pipeline", default="P0")
+    p_cal.add_argument(
+        "--expected-n",
+        type=int,
+        default=8373,
+        help="Abort if the vote/CER/marker join is not this many rows",
+    )
 
     p_stats = sub.add_parser("stats", help="Bootstrap, permutation tests, logistic regression")
     _add_common(p_stats)
@@ -251,6 +258,33 @@ def cmd_markers(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
     return 0
 
 
+def cmd_calibration(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
+    from wscaudit.metrics.calibration import CalibrationJoinError, run_calibration
+
+    out_root = Path(cfg["out_root"])
+    metrics = out_root / "metrics"
+    vote_path = out_root / "merged" / f"vote_{args.pipeline}.jsonl"
+    cer_path = metrics / "cer_per_utt.jsonl"
+    mark_path = metrics / "markers_per_utt.jsonl"
+    for p in (vote_path, cer_path, mark_path):
+        if not p.is_file():
+            print(f"missing input: {p}", file=sys.stderr)
+            return 2
+    try:
+        run_calibration(
+            vote_path,
+            cer_path,
+            mark_path,
+            metrics,
+            expected_n=args.expected_n,
+            system=f"vote_{args.pipeline}",
+        )
+    except CalibrationJoinError as exc:
+        print(str(exc), file=sys.stderr)
+        return 2
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -265,6 +299,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_cer(args, cfg)
     if args.command == "markers":
         return cmd_markers(args, cfg)
+    if args.command == "calibration":
+        return cmd_calibration(args, cfg)
     return _stub(args.command)
 
 
