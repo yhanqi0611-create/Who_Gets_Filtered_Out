@@ -10,7 +10,7 @@ from wscaudit.metrics.calibration import EQUAL_WIDTH_10, PRIMARY_BINS, ece_and_b
 from wscaudit.stats.bootstrap import bootstrap_p, micro_cer_batch, percentile_ci, stratified_indices
 from wscaudit.stats.holm import holm_adjust
 from wscaudit.stats.permutation import pass_delta_pp, permute_has_within_split, permutation_p
-from wscaudit.stats.run import run_stats, token_counts
+from wscaudit.stats.run import run_s2_filter, run_stats, token_counts
 
 
 def test_token_counts_recompute_if_n_retained_missing() -> None:
@@ -146,3 +146,23 @@ def test_run_stats_identical_s2_delta_ci(tmp_path: Path) -> None:
     assert row["ci_lo"] <= 0.0 <= row["ci_hi"]
     assert (out / "metrics" / "stats_report.md").is_file()
     assert (out / "metrics" / "stats_table.csv").is_file()
+
+
+def test_s2_filter_appends_without_dropping_p0(tmp_path: Path) -> None:
+    out = _write_panel(tmp_path)
+    run_stats(out, out / "metrics", expected_n=8, B=12, seed=1)
+    csv_path = out / "metrics" / "stats_table.csv"
+    def n_fam(text: str, fam: str) -> int:
+        return sum(1 for line in text.splitlines()[1:] if line.split(",")[-1] == fam)
+
+    n0 = n_fam(csv_path.read_text(encoding="utf-8"), "primary")
+    run_s2_filter(out, out / "metrics", expected_n=8, B=12, seed=20261103)
+    text = csv_path.read_text(encoding="utf-8")
+    assert n_fam(text, "primary") == n0
+    assert "secondary_S2" in text
+    md = (out / "metrics" / "stats_report.md").read_text(encoding="utf-8")
+    assert "S2 filter bias" in md
+    run_s2_filter(out, out / "metrics", expected_n=8, B=12, seed=20261103)
+    n_s2 = n_fam(csv_path.read_text(encoding="utf-8"), "secondary_S2")
+    assert n_s2 == n_fam(text, "secondary_S2")
+    assert n_s2 > 0

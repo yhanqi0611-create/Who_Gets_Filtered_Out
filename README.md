@@ -179,6 +179,15 @@ python -m wscaudit stats --seed 20261103 --B 10000
 
 `cer --systems vote_S2` merges into `cer_per_utt.jsonl` (keeps P0). Bootstrap B=10,000, seed 20261103, stratified by split for All. Holm on the primary family only.
 
+S2 filter-bias (append only; does not rewrite P0 stats) and a human-audit sample:
+
+```bash
+python -m wscaudit stats --s2-filter --seed 20261103 --B 10000
+python -m wscaudit audit
+# writes $WSC_OUT/audit/audit_round1.csv (key) and audit_round1_blind.csv
+python -m wscaudit audit-merge --key "$WSC_OUT/audit/audit_round1.csv" --human filled.csv
+```
+
 T4 has no native bfloat16; the Qwen3-ASR wrapper falls back to float16. Whisper is still a stub.
 
 ## Licence / data

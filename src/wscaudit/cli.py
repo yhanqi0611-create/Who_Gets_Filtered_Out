@@ -24,6 +24,8 @@ SUBCOMMANDS = (
     "markers",
     "calibration",
     "stats",
+    "audit",
+    "audit-merge",
     "report",
 )
 
@@ -145,6 +147,22 @@ def build_parser() -> argparse.ArgumentParser:
     p_stats.add_argument("--seed", type=int, default=20261103)
     p_stats.add_argument("--B", type=int, default=10_000, dest="n_boot")
     p_stats.add_argument("--expected-n", type=int, default=8373)
+    p_stats.add_argument(
+        "--s2-filter",
+        action="store_true",
+        help="Append vote_S2 filter-bias rows only (does not rewrite P0 stats)",
+    )
+
+    p_audit = sub.add_parser("audit", help="Write human-audit CSV (P0 marker candidates + controls)")
+    _add_common(p_audit)
+    p_audit.add_argument("--seed", type=int, default=20261103)
+    p_audit.add_argument("--n-control-dialect", type=int, default=40)
+    p_audit.add_argument("--n-control-low", type=int, default=20)
+
+    p_amerge = sub.add_parser("audit-merge", help="Join audit key vs human labels; print confusion")
+    _add_common(p_amerge)
+    p_amerge.add_argument("--key", type=Path, required=True)
+    p_amerge.add_argument("--human", type=Path, required=True)
 
     p_report = sub.add_parser("report", help="Comparison tables and provenance")
     _add_common(p_report)
@@ -295,20 +313,49 @@ def cmd_calibration(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
 
 
 def cmd_stats(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
-    from wscaudit.stats.run import StatsJoinError, run_stats
+    from wscaudit.stats.run import StatsJoinError, run_s2_filter, run_stats
 
     out_root = Path(cfg["out_root"])
     try:
-        run_stats(
-            out_root,
-            out_root / "metrics",
-            expected_n=args.expected_n,
-            B=args.n_boot,
-            seed=args.seed,
-        )
+        if args.s2_filter:
+            run_s2_filter(
+                out_root,
+                out_root / "metrics",
+                expected_n=args.expected_n,
+                B=args.n_boot,
+                seed=args.seed,
+            )
+        else:
+            run_stats(
+                out_root,
+                out_root / "metrics",
+                expected_n=args.expected_n,
+                B=args.n_boot,
+                seed=args.seed,
+            )
     except StatsJoinError as exc:
         print(str(exc), file=sys.stderr)
         return 2
+    return 0
+
+
+def cmd_audit(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
+    from wscaudit.audit import run_audit
+
+    run_audit(
+        Path(cfg["out_root"]),
+        Path(cfg["data_root"]),
+        seed=args.seed,
+        n_dialect=args.n_control_dialect,
+        n_low=args.n_control_low,
+    )
+    return 0
+
+
+def cmd_audit_merge(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
+    from wscaudit.audit import merge_audit
+
+    merge_audit(args.key, args.human)
     return 0
 
 
@@ -330,6 +377,10 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_calibration(args, cfg)
     if args.command == "stats":
         return cmd_stats(args, cfg)
+    if args.command == "audit":
+        return cmd_audit(args, cfg)
+    if args.command == "audit-merge":
+        return cmd_audit_merge(args, cfg)
     return _stub(args.command)
 
 

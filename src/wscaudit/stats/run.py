@@ -21,7 +21,12 @@ from wscaudit.stats.bootstrap import (
 )
 from wscaudit.stats.holm import holm_adjust
 from wscaudit.stats.logreg import fit_pass_logit
-from wscaudit.stats.permutation import pass_delta_pp, permute_has_within_split, permutation_p
+from wscaudit.stats.permutation import (
+    pass_delta_pp,
+    pass_rates,
+    permute_has_within_split,
+    permutation_p,
+)
 
 CER_SYSTEMS = ("sensevoice", "firered", "qwen3asr", "vote_P0", "vote_S2")
 VOTE_SYSTEMS = ("vote_P0", "vote_S2")
@@ -448,3 +453,120 @@ def _render_md(table: list[dict[str, Any]], B: int, seed: int, n: int) -> str:
         lines.append(f"| {r['name']} | {r['split']} | {est} | {ci} | {pr} | {ph} | {r['family']} |")
     lines.append("")
     return "\n".join(lines) + "\n"
+
+
+S2_SECTION = "## S2 filter bias (secondary, no Holm)"
+CSV_FIELDS = ["name", "split", "estimate", "ci_lo", "ci_hi", "p_raw", "p_holm", "family"]
+
+
+def s2_filter_rows(
+    panel: dict[str, Any],
+    B: int,
+    seed: int,
+) -> list[dict[str, Any]]:
+    rng = np.random.default_rng(seed)
+    splits = panel["splits"]
+    has = panel["has"]
+    vs = "vote_S2"
+    c_all, a_all = panel["conf"][vs], panel["acc"][vs]
+    idx_cache = {sp: stratified_indices(splits, B, rng, split_filter=None if sp == "All" else sp) for sp in SPLITS}
+    table: list[dict[str, Any]] = []
+    for split in SPLITS:
+        m = _mask(splits, split)
+        idx = idx_cache[split]
+        for thr, passed in (("0.9", panel["p09"][vs]), ("0.6", panel["p06"][vs])):
+            r1, r0, hat_pp = pass_rates(has[m], passed[m])
+            boot_has = np.array([pass_rates(has[idx[b]], passed[idx[b]])[0] for b in range(B)])
+            boot_no = np.array([pass_rates(has[idx[b]], passed[idx[b]])[1] for b in range(B)])
+            boot_pp = np.array([pass_rates(has[idx[b]], passed[idx[b]])[2] for b in range(B)])
+            if split == "All":
+                nulls_has = permute_has_within_split(has, splits, B, rng)
+                nulls = np.array([pass_delta_pp(nulls_has[b], passed) for b in range(B)])
+            else:
+                nulls_has = permute_has_within_split(has[m], splits[m], B, rng)
+                nulls = np.array([pass_delta_pp(nulls_has[b], passed[m]) for b in range(B)])
+            table.append(_row(f"s2_pass_{thr}_has_dialect", split, r1, percentile_ci(boot_has), None, "secondary_S2"))
+            table.append(_row(f"s2_pass_{thr}_no_dialect", split, r0, percentile_ci(boot_no), None, "secondary_S2"))
+            table.append(
+                _row(
+                    f"s2_delta_pp_pass_{thr}",
+                    split,
+                    hat_pp,
+                    percentile_ci(boot_pp),
+                    permutation_p(hat_pp, nulls, B),
+                    "secondary_S2",
+                )
+            )
+        e_has = ece_1d(c_all[m & has], a_all[m & has], EDGES3)
+        e_no = ece_1d(c_all[m & ~has], a_all[m & ~has], EDGES3)
+        hat_de = float(e_has - e_no)
+        de = np.empty(B)
+        eh = np.empty(B)
+        en = np.empty(B)
+        for b in range(B):
+            i = idx[b]
+            hb = has[i]
+            eh[b] = ece_1d(c_all[i][hb], a_all[i][hb], EDGES3)
+            en[b] = ece_1d(c_all[i][~hb], a_all[i][~hb], EDGES3)
+            de[b] = eh[b] - en[b]
+        table.append(_row("s2_ece3_has_dialect", split, e_has, percentile_ci(eh), None, "secondary_S2"))
+        table.append(_row("s2_ece3_no_dialect", split, e_no, percentile_ci(en), None, "secondary_S2"))
+        table.append(_row("s2_delta_ece_has_minus_no", split, hat_de, percentile_ci(de), bootstrap_p(de, B), "secondary_S2"))
+        logit = fit_pass_logit(has[m], panel["p09"][vs][m], panel["dur"][m], splits[m])
+        table.append(
+            _row(
+                "s2_logit_OR_has_dialect",
+                split,
+                logit["or"],
+                (logit["or_ci_lo"], logit["or_ci_hi"]),
+                logit["p"],
+                "secondary_S2",
+            )
+        )
+    return table
+
+
+def _append_csv(path: Path, rows: list[dict[str, Any]]) -> None:
+    existing: list[dict[str, Any]] = []
+    if path.is_file():
+        with path.open(encoding="utf-8") as f:
+            existing = [r for r in csv.DictReader(f) if r.get("family") != "secondary_S2"]
+    with path.open("w", encoding="utf-8", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=CSV_FIELDS)
+        w.writeheader()
+        for r in existing + rows:
+            w.writerow({k: r.get(k) for k in CSV_FIELDS})
+
+
+def _append_md_section(path: Path, section: str) -> None:
+    prev = path.read_text(encoding="utf-8") if path.is_file() else ""
+    if S2_SECTION in prev:
+        prev = prev[: prev.index(S2_SECTION)].rstrip() + "\n\n"
+    path.write_text(prev + section, encoding="utf-8")
+
+
+def run_s2_filter(
+    out_root: Path,
+    metrics_dir: Path | None = None,
+    *,
+    expected_n: int = 8373,
+    B: int = 10_000,
+    seed: int = SEED,
+) -> list[dict[str, Any]]:
+    """Append S2 filter-bias rows; do not rewrite P0 primary/secondary rows."""
+    metrics_dir = metrics_dir or (out_root / "metrics")
+    panel = _load_panel(out_root, expected_n)
+    rows = s2_filter_rows(panel, B, seed)
+    metrics_dir.mkdir(parents=True, exist_ok=True)
+    _append_csv(metrics_dir / "stats_table.csv", rows)
+    section = (
+        f"{S2_SECTION}\n\n"
+        f"vote_S2 confidence. n={panel['n']}, B={B}, seed={seed}. "
+        "No Holm (secondary). Pass rates use S2 `conf`; `has_dialect_ref` is from the reference.\n\n"
+        + "\n".join(_render_md(rows, B, seed, panel["n"]).splitlines()[3:])
+        + "\n"
+    )
+    _append_md_section(metrics_dir / "stats_report.md", section)
+    print(section)
+    print(f"appended {len(rows)} S2 rows -> {metrics_dir / 'stats_table.csv'}")
+    return rows

@@ -5,15 +5,18 @@ from __future__ import annotations
 import numpy as np
 
 
-def pass_delta_pp(has: np.ndarray, passed: np.ndarray) -> float:
+def pass_rates(has: np.ndarray, passed: np.ndarray) -> tuple[float, float, float]:
     has_b = has.astype(bool)
     n1 = int(has_b.sum())
     n0 = int((~has_b).sum())
-    if n1 == 0 or n0 == 0:
-        return float("nan")
-    r1 = float(passed[has_b].mean())
-    r0 = float(passed[~has_b].mean())
-    return (r1 - r0) * 100.0
+    r1 = float(passed[has_b].mean()) if n1 else float("nan")
+    r0 = float(passed[~has_b].mean()) if n0 else float("nan")
+    delta = (r1 - r0) * 100.0 if n1 and n0 else float("nan")
+    return r1, r0, delta
+
+
+def pass_delta_pp(has: np.ndarray, passed: np.ndarray) -> float:
+    return pass_rates(has, passed)[2]
 
 
 def permute_has_within_split(
