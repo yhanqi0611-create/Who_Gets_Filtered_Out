@@ -10,7 +10,14 @@ from wscaudit.metrics.calibration import EQUAL_WIDTH_10, PRIMARY_BINS, ece_and_b
 from wscaudit.stats.bootstrap import bootstrap_p, micro_cer_batch, percentile_ci, stratified_indices
 from wscaudit.stats.holm import holm_adjust
 from wscaudit.stats.permutation import pass_delta_pp, permute_has_within_split, permutation_p
-from wscaudit.stats.run import run_stats
+from wscaudit.stats.run import run_stats, token_counts
+
+
+def test_token_counts_recompute_if_n_retained_missing() -> None:
+    rec = {"ref_dialect": ["啥子", "晓得"], "hyp_dialect": ["啥子"]}
+    n_ref, n_ret = token_counts(rec)
+    assert n_ref == 2
+    assert n_ret == 1
 
 
 def test_ece_bin_edges_differ() -> None:

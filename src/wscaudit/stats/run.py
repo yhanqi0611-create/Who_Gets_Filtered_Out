@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import csv
 import json
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -39,6 +40,20 @@ PRIMARY_FAMILY = (
 
 class StatsJoinError(RuntimeError):
     pass
+
+
+def token_counts(rec: dict[str, Any]) -> tuple[float, float]:
+    """n_ref_dialect, n_retained. Recompute from lists if P0 rows lack the fields."""
+    ref_d = list(rec.get("ref_dialect") or [])
+    hyp_d = list(rec.get("hyp_dialect") or [])
+    n_ref = rec.get("n_ref_dialect")
+    n_ret = rec.get("n_retained")
+    if n_ref is None:
+        n_ref = len(ref_d)
+    if n_ret is None:
+        rc, hc = Counter(ref_d), Counter(hyp_d)
+        n_ret = sum(min(rc[s], hc[s]) for s in rc)
+    return float(n_ref), float(n_ret)
 
 
 def fmt_p(p: float | None, *, analytic: bool = False, B: int = 10_000) -> str:
@@ -180,8 +195,7 @@ def _load_panel(out_root: Path, expected_n: int) -> dict[str, Any]:
             rec = mark[(uid, s)]
             conf[s][i] = float(rec["conf"])
             has[s][i] = bool(rec["has_dialect_ref"])
-            n_ref[s][i] = float(rec.get("n_ref_dialect") if rec.get("n_ref_dialect") is not None else len(rec.get("ref_dialect") or []))
-            n_ret[s][i] = float(rec.get("n_retained") or 0.0)
+            n_ref[s][i], n_ret[s][i] = token_counts(rec)
             p09[s][i] = bool(rec["pass_0.9"])
             p06[s][i] = bool(rec["pass_0.6"])
     # ref dialect is a property of the reference; P0/S2 should match
