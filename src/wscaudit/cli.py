@@ -163,6 +163,12 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Only insert/refresh the links column on existing audit CSVs (keeps audit_id)",
     )
+    p_audit.add_argument(
+        "--audit-dir",
+        type=Path,
+        default=None,
+        help="Folder with audit_round1*.csv (default: $WSC_OUT/audit)",
+    )
 
     p_amerge = sub.add_parser("audit-merge", help="Join audit key vs human labels; print confusion")
     _add_common(p_amerge)
@@ -349,7 +355,7 @@ def cmd_audit(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
 
     out_root = Path(cfg["out_root"])
     if args.patch_links:
-        patch_audit_links(out_root / "audit")
+        patch_audit_links(args.audit_dir or (out_root / "audit"))
         return 0
     run_audit(
         out_root,
