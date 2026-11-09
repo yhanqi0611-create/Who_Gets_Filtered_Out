@@ -10,7 +10,10 @@ from typing import Any
 
 import numpy as np
 
+from urllib.parse import quote
+
 from wscaudit.asr.base import load_jsonl
+from wscaudit.data import HF_REPO_ID, wav_relpath
 from wscaudit.normalize import load_normalization_cfg, normalize
 
 SEED = 20261103
@@ -23,6 +26,7 @@ FULL_COLS = [
     "utt_id",
     "split",
     "wav_path",
+    "links",
     "dur",
     "conf",
     "cer_vote",
@@ -37,6 +41,14 @@ FULL_COLS = [
     *HUMAN_COLS,
 ]
 BLIND_DROP = {"auto_category", "conf", "cer_vote"}
+HF_RESOLVE = f"https://huggingface.co/datasets/{HF_REPO_ID}/resolve/main"
+
+
+def audio_link(split: str, utt_id: str) -> str:
+    """Public clickable wav URL (Hugging Face). Safe for Sheets/Excel."""
+    rel = wav_relpath(str(split), str(utt_id))
+    encoded = "/".join(quote(part, safe=".-_~") for part in rel.split("/"))
+    return f"{HF_RESOLVE}/{encoded}"
 GUIDELINES = """# Audit guidelines (round 1)
 
 Listen to the wav. Judge the **vote label against what is said**, not against the written reference.
@@ -199,6 +211,7 @@ def build_audit_rows(
                 "utt_id": uid,
                 "split": str(man.get("split") or rec.get("split") or ""),
                 "wav_path": wav_path,
+                "links": audio_link(str(man.get("split") or rec.get("split") or ""), uid),
                 "dur": man.get("dur"),
                 "conf": rec.get("conf"),
                 "cer_vote": (cer_p0.get(uid) or {}).get("cer"),
@@ -274,6 +287,38 @@ def run_audit(
     print(f"wrote {len(rows)} rows -> {audit_dir / 'audit_round1.csv'}")
     print(f"blind -> {audit_dir / 'audit_round1_blind.csv'}")
     return {"n": len(rows), "counts": counts, "dir": str(audit_dir)}
+
+
+def _insert_links_field(fieldnames: list[str]) -> list[str]:
+    cols = [c for c in fieldnames if c != "links"]
+    if "wav_path" in cols:
+        i = cols.index("wav_path") + 1
+        cols.insert(i, "links")
+    else:
+        cols.append("links")
+    return cols
+
+
+def patch_audit_links(audit_dir: Path) -> dict[str, int]:
+    """Add/refresh ``links`` on existing CSVs without reshuffling audit_id."""
+    n: dict[str, int] = {}
+    for name in ("audit_round1.csv", "audit_round1_blind.csv"):
+        path = audit_dir / name
+        if not path.is_file():
+            continue
+        with path.open(encoding="utf-8-sig", newline="") as f:
+            reader = csv.DictReader(f)
+            old_fields = list(reader.fieldnames or [])
+            rows = list(reader)
+        cols = _insert_links_field(old_fields)
+        for r in rows:
+            r["links"] = audio_link(str(r.get("split") or ""), str(r.get("utt_id") or ""))
+        write_csv(path, rows, cols)
+        n[name] = len(rows)
+        print(f"patched links on {len(rows)} rows -> {path}")
+    if not n:
+        raise FileNotFoundError(f"no audit CSVs under {audit_dir}")
+    return n
 
 
 def confusion(auto: list[str], human: list[str]) -> dict[tuple[str, str], int]:

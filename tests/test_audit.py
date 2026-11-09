@@ -3,7 +3,15 @@ from __future__ import annotations
 import csv
 from pathlib import Path
 
-from wscaudit.audit import BLIND_DROP, FULL_COLS, merge_audit, select_audit_utts, write_csv
+from wscaudit.audit import (
+    BLIND_DROP,
+    FULL_COLS,
+    audio_link,
+    merge_audit,
+    patch_audit_links,
+    select_audit_utts,
+    write_csv,
+)
 
 
 def _marks() -> list[dict]:
@@ -120,6 +128,35 @@ def test_blind_columns(tmp_path: Path) -> None:
     assert "conf" not in header
     assert "cer_vote" not in header
     assert "audit_id" in header
+    assert header[header.index("wav_path") + 1] == "links"
+
+
+def test_audio_link_hf() -> None:
+    url = audio_link("Easy", "utt_e1")
+    assert url.startswith("https://huggingface.co/datasets/ASLP-lab/WSC-Eval/resolve/main/")
+    assert url.endswith("WSC-Eval-ASR/Easy/wav/utt_e1.wav")
+
+
+def test_patch_links_keeps_ids(tmp_path: Path) -> None:
+    rows = [
+        {
+            "audit_id": "A007",
+            "utt_id": "utt_e1",
+            "split": "Easy",
+            "wav_path": "/tmp/x.wav",
+            "h_category": "no_error",
+        }
+    ]
+    write_csv(tmp_path / "audit_round1_blind.csv", rows, ["audit_id", "utt_id", "split", "wav_path", "h_category"])
+    patch_audit_links(tmp_path)
+    with (tmp_path / "audit_round1_blind.csv").open(encoding="utf-8-sig") as f:
+        reader = csv.DictReader(f)
+        fields = list(reader.fieldnames or [])
+        got = list(reader)
+    assert fields[fields.index("wav_path") + 1] == "links"
+    assert got[0]["audit_id"] == "A007"
+    assert got[0]["h_category"] == "no_error"
+    assert got[0]["links"] == audio_link("Easy", "utt_e1")
 
 
 def test_audit_merge_confusion(tmp_path: Path) -> None:

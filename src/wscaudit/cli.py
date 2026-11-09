@@ -158,6 +158,11 @@ def build_parser() -> argparse.ArgumentParser:
     p_audit.add_argument("--seed", type=int, default=20261103)
     p_audit.add_argument("--n-control-dialect", type=int, default=40)
     p_audit.add_argument("--n-control-low", type=int, default=20)
+    p_audit.add_argument(
+        "--patch-links",
+        action="store_true",
+        help="Only insert/refresh the links column on existing audit CSVs (keeps audit_id)",
+    )
 
     p_amerge = sub.add_parser("audit-merge", help="Join audit key vs human labels; print confusion")
     _add_common(p_amerge)
@@ -340,10 +345,14 @@ def cmd_stats(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
 
 
 def cmd_audit(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
-    from wscaudit.audit import run_audit
+    from wscaudit.audit import patch_audit_links, run_audit
 
+    out_root = Path(cfg["out_root"])
+    if args.patch_links:
+        patch_audit_links(out_root / "audit")
+        return 0
     run_audit(
-        Path(cfg["out_root"]),
+        out_root,
         Path(cfg["data_root"]),
         seed=args.seed,
         n_dialect=args.n_control_dialect,
