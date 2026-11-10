@@ -186,6 +186,12 @@ python -m wscaudit stats --s2-filter --seed 20261103 --B 10000
 python -m wscaudit audit
 # writes $WSC_OUT/audit/audit_round1.csv (key) and audit_round1_blind.csv
 python -m wscaudit audit-merge --key "$WSC_OUT/audit/audit_round1.csv" --human filled.csv
+# cleanup + weighted recall + paper table (does not reshuffle audit_id or rewrite stats):
+python -m wscaudit audit-merge \
+  --key "$WSC_OUT/audit/audit_round1.csv" \
+  --human filled.csv \
+  --write-dir "$WSC_OUT/audit" \
+  --tex results/audit_table.tex
 ```
 
 T4 has no native bfloat16; the Qwen3-ASR wrapper falls back to float16. Whisper is still a stub.

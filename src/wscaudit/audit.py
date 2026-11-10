@@ -67,7 +67,17 @@ These match the automatic detector in `wscaudit.metrics.markers` (candidates, no
 - **homophone** — label and speech differ by a near-homophone that is not the dialect↔Mandarin pair above (e.g. 巴适 vs 八十).
 - **other** — some other label error (deletion, insertion, substitution) that is not the above.
 - **no_error** — the label matches what was said (even if it disagrees with the reference).
-- **ref_error** — the **reference** is wrong relative to the audio; the label may still be fine.
+- **ref_error** — exclusive tag: the written reference is wrong relative to the audio. Do not combine with other `h_category` tags. Still fill `h_ref_correct`. Detector precision excludes rows whose only tag is `ref_error`.
+
+### Two or more label errors
+
+Do **not** pick only one. In `h_category` list every type that applies, joined by `|`, in this **fixed order** (drop the ones that do not apply):
+
+`mandarinization|over_dialect|homophone|other`
+
+Examples: `mandarinization|homophone` ; `over_dialect|other`.
+
+Never combine `no_error` with an error tag. Put span-level detail in `h_notes` (which words).
 
 ## Human `h_variety`
 

@@ -174,6 +174,26 @@ def build_parser() -> argparse.ArgumentParser:
     _add_common(p_amerge)
     p_amerge.add_argument("--key", type=Path, required=True)
     p_amerge.add_argument("--human", type=Path, required=True)
+    p_amerge.add_argument(
+        "--write-dir",
+        type=Path,
+        default=None,
+        help="Write cleaned CSV, metrics, confusion, guideline v2 (default: print only)",
+    )
+    p_amerge.add_argument(
+        "--markers-jsonl",
+        type=Path,
+        default=None,
+        help="P0 markers_per_utt.jsonl (default: $WSC_OUT/metrics/markers_per_utt.jsonl)",
+    )
+    p_amerge.add_argument(
+        "--tex",
+        type=Path,
+        default=None,
+        help="Paper table path (default: repo results/audit_table.tex)",
+    )
+    p_amerge.add_argument("--expected-n", type=int, default=126)
+    p_amerge.add_argument("--B", type=int, default=10_000, dest="n_boot")
 
     p_report = sub.add_parser("report", help="Comparison tables and provenance")
     _add_common(p_report)
@@ -369,8 +389,24 @@ def cmd_audit(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
 
 def cmd_audit_merge(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
     from wscaudit.audit import merge_audit
+    from wscaudit.audit_adjudicate import run_adjudication
 
-    merge_audit(args.key, args.human)
+    if args.write_dir is None:
+        merge_audit(args.key, args.human)
+        return 0
+    out_root = Path(cfg["out_root"])
+    markers_jsonl = args.markers_jsonl or (out_root / "metrics" / "markers_per_utt.jsonl")
+    tex = args.tex or (_REPO_ROOT / "results" / "audit_table.tex")
+    run_adjudication(
+        key_path=args.key,
+        human_path=args.human,
+        write_dir=args.write_dir,
+        markers_jsonl=markers_jsonl,
+        tex_path=tex,
+        expected_n=args.expected_n,
+        B=args.n_boot,
+        stats_table=out_root / "metrics" / "stats_table.csv",
+    )
     return 0
 
 
