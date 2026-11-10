@@ -13,6 +13,7 @@ from wscaudit.audit_adjudicate import (
     bootstrap_weighted_recall,
     canonical_category,
     canonical_tags,
+    canonical_variety,
     cleanup_human,
     compute_metrics,
     join_key_human,
@@ -32,6 +33,13 @@ def test_canonical_tag_order() -> None:
 def test_unknown_tag_raises() -> None:
     with pytest.raises(AuditTagError, match="A099"):
         canonical_tags("typo", audit_id="A099")
+
+
+def test_canonical_variety_multi() -> None:
+    assert canonical_variety("other|sichuanese", audit_id="A102") == "sichuanese|other"
+    assert canonical_variety("sichuanese | other", audit_id="A102") == "sichuanese|other"
+    with pytest.raises(AuditTagError, match="A102"):
+        canonical_variety("cantonese", audit_id="A102")
 
 
 def test_weighted_recall_toy() -> None:
@@ -58,7 +66,7 @@ def test_cleanup_and_join(tmp_path: Path) -> None:
         {
             "audit_id": "A001",
             "h_category": "other | homophone",
-            "h_variety": "Sichuanese",
+            "h_variety": "other|sichuanese",
             "h_ref_correct": "Y",
         },
         {
@@ -70,6 +78,7 @@ def test_cleanup_and_join(tmp_path: Path) -> None:
     ]
     clean, log, stats = cleanup_human(human)
     assert clean[0]["h_category"] == "homophone|other"
+    assert clean[0]["h_variety"] == "sichuanese|other"
     assert clean[0]["h_is_homophone"] == "1"
     assert clean[0]["h_any_error"] == "1"
     assert clean[1]["h_is_ref_error"] == "1"

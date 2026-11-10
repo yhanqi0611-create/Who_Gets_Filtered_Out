@@ -32,7 +32,8 @@ CATEGORY_ORDER = (
 )
 CATEGORY_SET = frozenset(CATEGORY_ORDER)
 ERROR_TAGS = frozenset({"mandarinization", "over_dialect", "homophone", "other"})
-VARIETY_SET = frozenset({"sichuanese", "accented_mandarin", "other", "unsure"})
+VARIETY_ORDER = ("sichuanese", "accented_mandarin", "other", "unsure")
+VARIETY_SET = frozenset(VARIETY_ORDER)
 REF_CORRECT_SET = frozenset({"y", "n", "unsure"})
 BOOL_TAG_COLS = tuple(f"h_is_{t}" for t in CATEGORY_ORDER) + ("h_any_error",)
 N_CONTROL_DIALECT_DESIGN = 40
@@ -73,6 +74,21 @@ def canonical_category(raw: str, *, audit_id: str = "") -> str:
     return "|".join(canonical_tags(raw, audit_id=audit_id))
 
 
+def canonical_variety(raw: str, *, audit_id: str = "") -> str:
+    parts = [p.strip().lower() for p in (raw or "").split("|")]
+    parts = [p for p in parts if p]
+    if not parts:
+        return "missing"
+    unknown = [p for p in parts if p not in VARIETY_SET]
+    if unknown:
+        raise AuditTagError(f"{audit_id}: unknown h_variety tag(s) {unknown} in {raw!r}")
+    seen: list[str] = []
+    for tag in VARIETY_ORDER:
+        if tag in parts and tag not in seen:
+            seen.append(tag)
+    return "|".join(seen)
+
+
 def _canon_choice(raw: str, allowed: frozenset[str], *, empty_as: str = "missing") -> str:
     s = (raw or "").strip().lower()
     if not s:
@@ -111,7 +127,7 @@ def cleanup_human(rows: list[dict[str, str]]) -> tuple[list[dict[str, str]], lis
             log.append({"audit_id": aid, "column": "h_category", "old": old_cat, "new": new_cat})
         row["h_category"] = new_cat
         try:
-            new_var = _canon_choice(r.get("h_variety") or "", VARIETY_SET)
+            new_var = canonical_variety(r.get("h_variety") or "", audit_id=aid)
         except AuditTagError as e:
             raise AuditTagError(f"{aid}: h_variety {e}") from e
         old_var = r.get("h_variety") or ""
