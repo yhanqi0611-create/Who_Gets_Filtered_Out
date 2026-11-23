@@ -26,6 +26,7 @@ SUBCOMMANDS = (
     "stats",
     "audit",
     "audit-merge",
+    "audit-report",
     "report",
 )
 
@@ -194,6 +195,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_amerge.add_argument("--expected-n", type=int, default=126)
     p_amerge.add_argument("--B", type=int, default=10_000, dest="n_boot")
+
+    p_arep = sub.add_parser("audit-report", help="Read-only paper write-up of round-1 audit")
+    _add_common(p_arep)
+    p_arep.add_argument("--audit-dir", type=Path, default=None)
+    p_arep.add_argument("--stats-table", type=Path, default=None)
+    p_arep.add_argument("--out-dir", type=Path, default=None)
 
     p_report = sub.add_parser("report", help="Comparison tables and provenance")
     _add_common(p_report)
@@ -387,6 +394,20 @@ def cmd_audit(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
     return 0
 
 
+def cmd_audit_report(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
+    from wscaudit.audit_report import main_paths_from_env, run_audit_report
+
+    ad, st, od = main_paths_from_env(
+        audit_dir=args.audit_dir,
+        stats_table=args.stats_table,
+        out_dir=args.out_dir,
+        out_root=Path(cfg["out_root"]),
+        repo_root=_REPO_ROOT,
+    )
+    run_audit_report(audit_dir=ad, stats_table=st, out_dir=od, repo_root=_REPO_ROOT)
+    return 0
+
+
 def cmd_audit_merge(args: argparse.Namespace, cfg: dict[str, Any]) -> int:
     from wscaudit.audit import merge_audit
     from wscaudit.audit_adjudicate import run_adjudication
@@ -432,6 +453,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_audit(args, cfg)
     if args.command == "audit-merge":
         return cmd_audit_merge(args, cfg)
+    if args.command == "audit-report":
+        return cmd_audit_report(args, cfg)
     return _stub(args.command)
 
 

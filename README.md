@@ -194,6 +194,17 @@ python -m wscaudit audit-merge \
   --tex results/audit_table.tex
 ```
 
+Round-1 audit write-up (read-only over `audit/` and `metrics/`; no resampling or retuning):
+
+```bash
+python -m wscaudit audit-report \
+  --audit-dir "$WSC_OUT/audit" \
+  --stats-table "$WSC_OUT/metrics/stats_table.csv" \
+  --out-dir results
+```
+
+Writes `results/audit_findings.md`, `results/audit_findings_numbers.json`, `results/figures/audit_precision_recall.{pdf,png}`, `results/seminar_2026-11-25_notes.md`, and `results/AUDIT_REPORT_PROVENANCE.txt`.
+
 T4 has no native bfloat16; the Qwen3-ASR wrapper falls back to float16. Whisper is still a stub.
 
 ## Licence / data
