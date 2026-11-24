@@ -1,0 +1,13 @@
+We adjudicated a stratified sample of 126 utterances (control dialect 40, control lowconf 20, mandarinization 32, over dialect 34) with a single annotator who was blind to the automatic categories and who applied multi-label error tags. Rows whose only tag is `ref_error` (n = 1) are excluded from detector precision denominators.
+
+The automatic mandarinization detector is **precise but narrow**. Of 32 automatically flagged items, 23 carried a human mandarinization tag (precision 71.9% , Wilson 95% CI [54.6, 84.4]). Sampling-weighted recall is 4.2% (percentile bootstrap 95% CI [2.9, 6.4]; B = 10000, seed 20261103). Control utterances are a sample of 40 from a frame of 1163 reference-dialect items with no automatic candidate, so each control miss is weighted by w = 1163/40 (18 misses in the sample). When the detector fires it is usually right, but it misses most mandarinization outside the marker lexicon; automatic counts are therefore a lower bound.
+
+The over-dialectalization detector confirmed 3 of 34 automatic flags (precision 8.8%, Wilson 95% CI [3.0, 23.0]). **The detector is unreliable and its automatic counts are not treated as a result.** Dominant false-positive forms in the guideline notes include `嘞`, `噻`, `一哈`, `撒`, `莫`.
+
+Among low-confidence controls, 19 of 20 items had at least one human error tag (95.0%, Wilson 95% CI [76.4, 99.1]; tags: mandarinization 2, homophone 13, other 15). Confidence therefore picks up errors, but mostly non-dialect ones (homophone and other).
+
+Illustrative labelled spans (deterministic first matches; notes quoted without paraphrase) include A025: 你还莫说当开发商把房子价格降下来后成交量一哈就上去了 → 你还莫说当开发商把房子价格降下来后成交量一下就上去了 (tags: mandarinization; notes: “一哈”). A022: 还有只要嘞个绿马公主就行了 → 🎼还有只要那个绿马公出就行了 (tags: homophone|other; notes: “立马”). A039: 给大家摆一哈 → 🎼给大家摆一下 (tags: mandarinization|other; notes: “一哈”). A008: 耍些刀枪那天猴儿们摘完果子 → 耍些刀枪那天猴儿们折完果子😮 (tags: over_dialect). A035: 不是烧酒菜呢 → 老师少就菜了 (tags: homophone; notes: “下酒菜”).
+
+The audit qualifies the automatic marker-retention counts; it does not change the filter-bias conclusion. Dialect-marked utterances pass the 0.9 confidence filter **more** often unadjusted (Δpp = dialect − non-dialect > 0; Δpp = 3.36, Holm p = 0.0534), the adjusted odds ratio after duration and split is < 1 (OR = 0.843, Holm p = 0.0534), and **neither is significant after Holm**. Dialect items are slightly worse calibrated (ΔECE = 0.0125, Holm p = 0.0258). We do not treat this as evidence that filter bias is established.
+
+A single annotator has labelled the sample so far; intra-annotator κ on `reannotate_ids.txt` is planned after a multi-week gap. The lexicon was not retuned on this sample, so the recall figure is specific to the frozen marker list.

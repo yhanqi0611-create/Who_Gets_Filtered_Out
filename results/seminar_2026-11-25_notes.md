@@ -1,0 +1,6 @@
+- Design: 126 items (control_dialect=40, control_lowconf=20, mandarinization=32, over_dialect=34); blind single annotator; input hashes recorded and stats_table hash unchanged.
+- Mandarinization is precise but narrow: precision 71.9% [54.6, 84.4]; weighted recall 4.2% [2.9, 6.4] (w = 1163/40).
+- Over-dialect detector precision 8.8% [3.0, 23.0]; **unreliable**, automatic counts are not a result.
+- Low-confidence controls: 19/20 (95.0%) have a human error tag; mostly homophone/other rather than dialect mapping errors.
+- Filter: dialect utterances pass the 0.9 threshold **more** often unadjusted (Δpp = 3.36, Holm p = 0.0534); OR after duration and split = 0.843 (Holm p = 0.0534); neither is significant after Holm; no claim of filter bias.
+- Limitations: single annotator; κ after a multi-week gap (early December); lexicon not retuned; LLM-GER and Whisper not run.

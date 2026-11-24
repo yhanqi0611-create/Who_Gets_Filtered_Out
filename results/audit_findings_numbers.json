@@ -1,0 +1,513 @@
+[
+  {
+    "file": "audit_round1.csv",
+    "row_key": "n_rows",
+    "column": "n",
+    "raw_value": 126,
+    "formatted": "126"
+  },
+  {
+    "file": "audit_round1.csv",
+    "row_key": "auto_category:control_dialect",
+    "column": "n",
+    "raw_value": 40,
+    "formatted": "40"
+  },
+  {
+    "file": "audit_round1.csv",
+    "row_key": "auto_category:control_lowconf",
+    "column": "n",
+    "raw_value": 20,
+    "formatted": "20"
+  },
+  {
+    "file": "audit_round1.csv",
+    "row_key": "auto_category:mandarinization",
+    "column": "n",
+    "raw_value": 32,
+    "formatted": "32"
+  },
+  {
+    "file": "audit_round1.csv",
+    "row_key": "auto_category:over_dialect",
+    "column": "n",
+    "raw_value": 34,
+    "formatted": "34"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "n_ref_error_only",
+    "column": "k",
+    "raw_value": 1,
+    "formatted": "1"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "precision_mandarinization",
+    "column": "k",
+    "raw_value": "23",
+    "formatted": "23"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "precision_mandarinization",
+    "column": "n",
+    "raw_value": "32",
+    "formatted": "32"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "precision_mandarinization",
+    "column": "estimate",
+    "raw_value": "0.71875",
+    "formatted": "71.9"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "precision_mandarinization",
+    "column": "ci_low",
+    "raw_value": "0.5462549057408341",
+    "formatted": "54.6"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "precision_mandarinization",
+    "column": "ci_high",
+    "raw_value": "0.8443541950225724",
+    "formatted": "84.4"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "recall_mandarinization_weighted",
+    "column": "estimate",
+    "raw_value": "0.0420975565113938",
+    "formatted": "4.2"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "recall_mandarinization_weighted",
+    "column": "ci_low",
+    "raw_value": "0.028846883777423518",
+    "formatted": "2.9"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "recall_mandarinization_weighted",
+    "column": "ci_high",
+    "raw_value": "0.06436041834271923",
+    "formatted": "6.4"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "recall_mandarinization_weighted",
+    "column": "note:N_ctrl_pop",
+    "raw_value": 1163,
+    "formatted": "1163"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "recall_mandarinization_weighted",
+    "column": "note:misses_ctrl",
+    "raw_value": 18,
+    "formatted": "18"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "recall_mandarinization_weighted",
+    "column": "note:design_n",
+    "raw_value": 40,
+    "formatted": "40"
+  },
+  {
+    "file": "PROVENANCE.txt",
+    "row_key": "B",
+    "column": "B",
+    "raw_value": 10000,
+    "formatted": "10000"
+  },
+  {
+    "file": "PROVENANCE.txt",
+    "row_key": "seed",
+    "column": "seed",
+    "raw_value": 20261103,
+    "formatted": "20261103"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "precision_over_dialect",
+    "column": "k",
+    "raw_value": "3",
+    "formatted": "3"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "precision_over_dialect",
+    "column": "n",
+    "raw_value": "34",
+    "formatted": "34"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "precision_over_dialect",
+    "column": "estimate",
+    "raw_value": "0.08823529411764706",
+    "formatted": "8.8"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "precision_over_dialect",
+    "column": "ci_low",
+    "raw_value": "0.03046594367464854",
+    "formatted": "3.0"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "precision_over_dialect",
+    "column": "ci_high",
+    "raw_value": "0.22960486562808874",
+    "formatted": "23.0"
+  },
+  {
+    "file": "code",
+    "row_key": "wilson",
+    "column": "percent",
+    "raw_value": 95,
+    "formatted": "95"
+  },
+  {
+    "file": "code",
+    "row_key": "bootstrap",
+    "column": "percent",
+    "raw_value": 95,
+    "formatted": "95"
+  },
+  {
+    "file": "code",
+    "row_key": "wilson",
+    "column": "percent",
+    "raw_value": 95,
+    "formatted": "95"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "control_lowconf_error_rate",
+    "column": "k",
+    "raw_value": "19",
+    "formatted": "19"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "control_lowconf_error_rate",
+    "column": "n",
+    "raw_value": "20",
+    "formatted": "20"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "control_lowconf_error_rate",
+    "column": "estimate",
+    "raw_value": "0.95",
+    "formatted": "95.0"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "control_lowconf_error_rate",
+    "column": "ci_low",
+    "raw_value": "0.7638688065532577",
+    "formatted": "76.4"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "control_lowconf_error_rate",
+    "column": "ci_high",
+    "raw_value": "0.9911185511992044",
+    "formatted": "99.1"
+  },
+  {
+    "file": "audit_round1_clean.csv",
+    "row_key": "lowconf:mandarinization",
+    "column": "h_is",
+    "raw_value": 2,
+    "formatted": "2"
+  },
+  {
+    "file": "audit_round1_clean.csv",
+    "row_key": "lowconf:homophone",
+    "column": "h_is",
+    "raw_value": 13,
+    "formatted": "13"
+  },
+  {
+    "file": "audit_round1_clean.csv",
+    "row_key": "lowconf:other",
+    "column": "h_is",
+    "raw_value": 15,
+    "formatted": "15"
+  },
+  {
+    "file": "code",
+    "row_key": "wilson",
+    "column": "percent",
+    "raw_value": 95,
+    "formatted": "95"
+  },
+  {
+    "file": "stats_table.csv",
+    "row_key": "delta_pp_pass_0.9",
+    "column": "sign_word",
+    "raw_value": 3.360139283254282,
+    "formatted": "more"
+  },
+  {
+    "file": "stats_table.csv",
+    "row_key": "delta_pp_pass_0.9",
+    "column": "cmp",
+    "raw_value": 3.360139283254282,
+    "formatted": ">"
+  },
+  {
+    "file": "stats_table.csv",
+    "row_key": "logit_OR_has_dialect_P0",
+    "column": "cmp",
+    "raw_value": 0.8429488467402066,
+    "formatted": "<"
+  },
+  {
+    "file": "stats_table.csv",
+    "row_key": "p_holm",
+    "column": "clause",
+    "raw_value": "0.0534,0.0534",
+    "formatted": "neither is significant after Holm"
+  },
+  {
+    "file": "stats_table.csv",
+    "row_key": "delta_pp_pass_0.9",
+    "column": "estimate",
+    "raw_value": "3.360139283254282",
+    "formatted": "3.36"
+  },
+  {
+    "file": "stats_table.csv",
+    "row_key": "logit_OR_has_dialect_P0",
+    "column": "estimate",
+    "raw_value": "0.8429488467402066",
+    "formatted": "0.843"
+  },
+  {
+    "file": "stats_table.csv",
+    "row_key": "delta_ece_has_minus_no",
+    "column": "estimate",
+    "raw_value": "0.012496469155197254",
+    "formatted": "0.0125"
+  },
+  {
+    "file": "stats_table.csv",
+    "row_key": "delta_pp_pass_0.9",
+    "column": "p_holm",
+    "raw_value": "0.0534",
+    "formatted": "0.0534"
+  },
+  {
+    "file": "stats_table.csv",
+    "row_key": "logit_OR_has_dialect_P0",
+    "column": "p_holm",
+    "raw_value": "0.0534",
+    "formatted": "0.0534"
+  },
+  {
+    "file": "stats_table.csv",
+    "row_key": "delta_ece_has_minus_no",
+    "column": "p_holm",
+    "raw_value": "0.0258",
+    "formatted": "0.0258"
+  },
+  {
+    "file": "stats_table.csv",
+    "row_key": "delta_pp_pass_0.9",
+    "column": "name",
+    "raw_value": "0.9",
+    "formatted": "0.9"
+  },
+  {
+    "file": "audit_round1.csv",
+    "row_key": "n_rows",
+    "column": "n",
+    "raw_value": 126,
+    "formatted": "126"
+  },
+  {
+    "file": "audit_round1.csv",
+    "row_key": "auto_category:control_dialect",
+    "column": "n",
+    "raw_value": 40,
+    "formatted": "40"
+  },
+  {
+    "file": "audit_round1.csv",
+    "row_key": "auto_category:control_lowconf",
+    "column": "n",
+    "raw_value": 20,
+    "formatted": "20"
+  },
+  {
+    "file": "audit_round1.csv",
+    "row_key": "auto_category:mandarinization",
+    "column": "n",
+    "raw_value": 32,
+    "formatted": "32"
+  },
+  {
+    "file": "audit_round1.csv",
+    "row_key": "auto_category:over_dialect",
+    "column": "n",
+    "raw_value": 34,
+    "formatted": "34"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "precision_mandarinization",
+    "column": "estimate",
+    "raw_value": "0.71875",
+    "formatted": "71.9"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "precision_mandarinization",
+    "column": "ci_low",
+    "raw_value": "0.5462549057408341",
+    "formatted": "54.6"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "precision_mandarinization",
+    "column": "ci_high",
+    "raw_value": "0.8443541950225724",
+    "formatted": "84.4"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "recall_mandarinization_weighted",
+    "column": "estimate",
+    "raw_value": "0.0420975565113938",
+    "formatted": "4.2"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "recall_mandarinization_weighted",
+    "column": "ci_low",
+    "raw_value": "0.028846883777423518",
+    "formatted": "2.9"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "recall_mandarinization_weighted",
+    "column": "ci_high",
+    "raw_value": "0.06436041834271923",
+    "formatted": "6.4"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "precision_over_dialect",
+    "column": "estimate",
+    "raw_value": "0.08823529411764706",
+    "formatted": "8.8"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "precision_over_dialect",
+    "column": "ci_low",
+    "raw_value": "0.03046594367464854",
+    "formatted": "3.0"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "precision_over_dialect",
+    "column": "ci_high",
+    "raw_value": "0.22960486562808874",
+    "formatted": "23.0"
+  },
+  {
+    "file": "stats_table.csv",
+    "row_key": "delta_pp_pass_0.9",
+    "column": "sign_word",
+    "raw_value": "3.360139283254282",
+    "formatted": "more"
+  },
+  {
+    "file": "stats_table.csv",
+    "row_key": "delta_pp_pass_0.9",
+    "column": "estimate",
+    "raw_value": "3.360139283254282",
+    "formatted": "3.36"
+  },
+  {
+    "file": "stats_table.csv",
+    "row_key": "logit_OR_has_dialect_P0",
+    "column": "estimate",
+    "raw_value": "0.8429488467402066",
+    "formatted": "0.843"
+  },
+  {
+    "file": "stats_table.csv",
+    "row_key": "delta_pp_pass_0.9",
+    "column": "p_holm",
+    "raw_value": "0.0534",
+    "formatted": "0.0534"
+  },
+  {
+    "file": "stats_table.csv",
+    "row_key": "logit_OR_has_dialect_P0",
+    "column": "p_holm",
+    "raw_value": "0.0534",
+    "formatted": "0.0534"
+  },
+  {
+    "file": "stats_table.csv",
+    "row_key": "p_holm",
+    "column": "clause",
+    "raw_value": "seminar",
+    "formatted": "neither is significant after Holm"
+  },
+  {
+    "file": "stats_table.csv",
+    "row_key": "delta_pp_pass_0.9",
+    "column": "name",
+    "raw_value": "0.9",
+    "formatted": "0.9"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "recall_mandarinization_weighted",
+    "column": "note:N_ctrl_pop",
+    "raw_value": 1163,
+    "formatted": "1163"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "recall_mandarinization_weighted",
+    "column": "note:design_n",
+    "raw_value": 40,
+    "formatted": "40"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "control_lowconf_error_rate",
+    "column": "k",
+    "raw_value": "19",
+    "formatted": "19"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "control_lowconf_error_rate",
+    "column": "n",
+    "raw_value": "20",
+    "formatted": "20"
+  },
+  {
+    "file": "audit_metrics.csv",
+    "row_key": "control_lowconf_error_rate",
+    "column": "estimate",
+    "raw_value": "0.95",
+    "formatted": "95.0"
+  }
+]
