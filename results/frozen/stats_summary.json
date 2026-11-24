@@ -1,0 +1,7 @@
+{
+  "n": 8373,
+  "B": 10000,
+  "seed": 20261103,
+  "note": "Primary family Holm-adjusted: ΔCER P0−qwen3 / P0−S2 (All), ΔECE has−no (All), Δpp pass≥0.9 (All, permutation p), Δretention P0−S2 (All), logit OR has_dialect P0 (All). ECE_3 vs ECE_10 bin edges differ; equal All ECE on 3 Nov was chance.",
+  "rows": []
+}

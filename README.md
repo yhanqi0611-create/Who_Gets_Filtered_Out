@@ -207,6 +207,18 @@ Writes `results/audit_findings.md`, `results/audit_findings_numbers.json`, `resu
 
 T4 has no native bfloat16; the Qwen3-ASR wrapper falls back to float16. Whisper is still a stub.
 
+## Paper skeleton (Prompt 17)
+
+Read-only over `results/` and metrics/; every number in the paper is a generated macro.
+
+```bash
+bash scripts/fetch_tacl_style.sh
+python -m wscaudit paper-tables --snapshot
+bash scripts/build_paper.sh
+```
+
+Overleaf steps are in [`paper/README.md`](paper/README.md).
+
 ## Licence / data
 
 WSC-Eval is Apache-2.0 on Hugging Face. We do not redistribute the audio.

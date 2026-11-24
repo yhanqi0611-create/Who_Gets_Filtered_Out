@@ -1,0 +1,786 @@
+[
+  {
+    "column": "n",
+    "file": "audit_findings_numbers.json",
+    "formatted": "126",
+    "macro_or_cell": "AuditN",
+    "raw_value": 126,
+    "row_key": "n_rows"
+  },
+  {
+    "column": "n",
+    "file": "audit_findings_numbers.json",
+    "formatted": "40",
+    "macro_or_cell": "AuditNCtrlDialect",
+    "raw_value": 40,
+    "row_key": "auto_category:control_dialect"
+  },
+  {
+    "column": "n",
+    "file": "audit_findings_numbers.json",
+    "formatted": "20",
+    "macro_or_cell": "AuditNCtrlLowconf",
+    "raw_value": 20,
+    "row_key": "auto_category:control_lowconf"
+  },
+  {
+    "column": "n",
+    "file": "audit_findings_numbers.json",
+    "formatted": "32",
+    "macro_or_cell": "AuditNMand",
+    "raw_value": 32,
+    "row_key": "auto_category:mandarinization"
+  },
+  {
+    "column": "n",
+    "file": "audit_findings_numbers.json",
+    "formatted": "34",
+    "macro_or_cell": "AuditNOver",
+    "raw_value": 34,
+    "row_key": "auto_category:over_dialect"
+  },
+  {
+    "column": "seed",
+    "file": "stats_summary.json",
+    "formatted": "20261103",
+    "macro_or_cell": "BootSeed",
+    "raw_value": 20261103,
+    "row_key": "seed"
+  },
+  {
+    "column": "estimate",
+    "file": "stats_table.csv",
+    "formatted": "0.147",
+    "macro_or_cell": "CERfirered",
+    "raw_value": "0.1474388574298653",
+    "row_key": "cer_firered"
+  },
+  {
+    "column": "ci",
+    "file": "stats_table.csv",
+    "formatted": "[0.143, 0.152]",
+    "macro_or_cell": "CERfireredCI",
+    "raw_value": "0.14337401255725118",
+    "row_key": "cer_firered"
+  },
+  {
+    "column": "estimate",
+    "file": "stats_table.csv",
+    "formatted": "0.134",
+    "macro_or_cell": "CERqwen",
+    "raw_value": "0.13398303643035944",
+    "row_key": "cer_qwen3asr"
+  },
+  {
+    "column": "ci",
+    "file": "stats_table.csv",
+    "formatted": "[0.130, 0.138]",
+    "macro_or_cell": "CERqwenCI",
+    "raw_value": "0.13016452033328763",
+    "row_key": "cer_qwen3asr"
+  },
+  {
+    "column": "estimate",
+    "file": "stats_table.csv",
+    "formatted": "0.166",
+    "macro_or_cell": "CERsensevoice",
+    "raw_value": "0.16561758248880032",
+    "row_key": "cer_sensevoice"
+  },
+  {
+    "column": "ci",
+    "file": "stats_table.csv",
+    "formatted": "[0.162, 0.169]",
+    "macro_or_cell": "CERsensevoiceCI",
+    "raw_value": "0.16201891461354898",
+    "row_key": "cer_sensevoice"
+  },
+  {
+    "column": "estimate",
+    "file": "stats_table.csv",
+    "formatted": "0.154",
+    "macro_or_cell": "CERvoteP",
+    "raw_value": "0.1540979091225768",
+    "row_key": "cer_vote_P0"
+  },
+  {
+    "column": "ci",
+    "file": "stats_table.csv",
+    "formatted": "[0.150, 0.158]",
+    "macro_or_cell": "CERvotePCI",
+    "raw_value": "0.1502526585818233",
+    "row_key": "cer_vote_P0"
+  },
+  {
+    "column": "estimate",
+    "file": "stats_table.csv",
+    "formatted": "0.170",
+    "macro_or_cell": "CERvoteS",
+    "raw_value": "0.16959519122495767",
+    "row_key": "cer_vote_S2"
+  },
+  {
+    "column": "ci",
+    "file": "stats_table.csv",
+    "formatted": "[0.166, 0.174]",
+    "macro_or_cell": "CERvoteSCI",
+    "raw_value": "0.16575479455153255",
+    "row_key": "cer_vote_S2"
+  },
+  {
+    "column": "estimate",
+    "file": "stats_table.csv",
+    "formatted": "-0.015",
+    "macro_or_cell": "DeltaCERPS",
+    "raw_value": "-0.015497282102380883",
+    "row_key": "delta_cer_P0_minus_S2"
+  },
+  {
+    "column": "ci",
+    "file": "stats_table.csv",
+    "formatted": "[-0.017, -0.014]",
+    "macro_or_cell": "DeltaCERPSCI",
+    "raw_value": "-0.017374424330247648",
+    "row_key": "delta_cer_P0_minus_S2"
+  },
+  {
+    "column": "p_holm",
+    "file": "stats_table.csv",
+    "formatted": "0.0006",
+    "macro_or_cell": "DeltaCERPSpHolm",
+    "raw_value": "0.0006000000000000001",
+    "row_key": "delta_cer_P0_minus_S2"
+  },
+  {
+    "column": "estimate",
+    "file": "stats_table.csv",
+    "formatted": "+0.020",
+    "macro_or_cell": "DeltaCERPqwen",
+    "raw_value": "0.020114872692217345",
+    "row_key": "delta_cer_P0_minus_qwen3asr"
+  },
+  {
+    "column": "ci",
+    "file": "stats_table.csv",
+    "formatted": "[+0.018, +0.022]",
+    "macro_or_cell": "DeltaCERPqwenCI",
+    "raw_value": "0.017896625983792262",
+    "row_key": "delta_cer_P0_minus_qwen3asr"
+  },
+  {
+    "column": "p_holm",
+    "file": "stats_table.csv",
+    "formatted": "0.0006",
+    "macro_or_cell": "DeltaCERPqwenpHolm",
+    "raw_value": "0.0006000000000000001",
+    "row_key": "delta_cer_P0_minus_qwen3asr"
+  },
+  {
+    "column": "estimate",
+    "file": "stats_table.csv",
+    "formatted": "0.0125",
+    "macro_or_cell": "DeltaECE",
+    "raw_value": "0.012496469155197254",
+    "row_key": "delta_ece_has_minus_no"
+  },
+  {
+    "column": "ci",
+    "file": "stats_table.csv",
+    "formatted": "[0.00324, 0.0221]",
+    "macro_or_cell": "DeltaECECI",
+    "raw_value": "0.003235082443877705",
+    "row_key": "delta_ece_has_minus_no"
+  },
+  {
+    "column": "p_holm",
+    "file": "stats_table.csv",
+    "formatted": "0.0258",
+    "macro_or_cell": "DeltaECEpHolm",
+    "raw_value": "0.0258",
+    "row_key": "delta_ece_has_minus_no"
+  },
+  {
+    "column": "estimate",
+    "file": "stats_table.csv",
+    "formatted": "3.36",
+    "macro_or_cell": "DeltaPP",
+    "raw_value": "3.360139283254282",
+    "row_key": "delta_pp_pass_0.9"
+  },
+  {
+    "column": "ci",
+    "file": "stats_table.csv",
+    "formatted": "[0.769, 5.93]",
+    "macro_or_cell": "DeltaPPCI",
+    "raw_value": "0.7686291413201362",
+    "row_key": "delta_pp_pass_0.9"
+  },
+  {
+    "column": "p_holm",
+    "file": "stats_table.csv",
+    "formatted": "0.0534",
+    "macro_or_cell": "DeltaPPpHolm",
+    "raw_value": "0.0534",
+    "row_key": "delta_pp_pass_0.9"
+  },
+  {
+    "column": "sign_word",
+    "file": "stats_table.csv",
+    "formatted": "more",
+    "macro_or_cell": "FilterPassWord",
+    "raw_value": 3.360139283254282,
+    "row_key": "delta_pp_pass_0.9"
+  },
+  {
+    "column": "name",
+    "file": "stats_table.csv",
+    "formatted": "0.9",
+    "macro_or_cell": "FilterThr",
+    "raw_value": "0.9",
+    "row_key": "delta_pp_pass_0.9"
+  },
+  {
+    "column": "clause",
+    "file": "stats_table.csv",
+    "formatted": "neither is significant after Holm",
+    "macro_or_cell": "HolmClause",
+    "raw_value": "0.0534,0.0534",
+    "row_key": "p_holm"
+  },
+  {
+    "column": "ci",
+    "file": "audit_findings_numbers.json",
+    "formatted": "[76.4, 99.1]",
+    "macro_or_cell": "LowconfCI",
+    "raw_value": 0.7638688065532577,
+    "row_key": "control_lowconf_error_rate"
+  },
+  {
+    "column": "k",
+    "file": "audit_findings_numbers.json",
+    "formatted": "19",
+    "macro_or_cell": "LowconfK",
+    "raw_value": 19,
+    "row_key": "control_lowconf_error_rate"
+  },
+  {
+    "column": "n",
+    "file": "audit_findings_numbers.json",
+    "formatted": "20",
+    "macro_or_cell": "LowconfN",
+    "raw_value": 20,
+    "row_key": "control_lowconf_error_rate"
+  },
+  {
+    "column": "estimate",
+    "file": "audit_findings_numbers.json",
+    "formatted": "95.0",
+    "macro_or_cell": "LowconfRate",
+    "raw_value": 0.95,
+    "row_key": "control_lowconf_error_rate"
+  },
+  {
+    "column": "estimate",
+    "file": "audit_findings_numbers.json",
+    "formatted": "71.9",
+    "macro_or_cell": "MandPrec",
+    "raw_value": 0.71875,
+    "row_key": "precision_mandarinization"
+  },
+  {
+    "column": "ci",
+    "file": "audit_findings_numbers.json",
+    "formatted": "[54.6, 84.4]",
+    "macro_or_cell": "MandPrecCI",
+    "raw_value": 0.5462549057408341,
+    "row_key": "precision_mandarinization"
+  },
+  {
+    "column": "k",
+    "file": "audit_findings_numbers.json",
+    "formatted": "23",
+    "macro_or_cell": "MandPrecK",
+    "raw_value": 23,
+    "row_key": "precision_mandarinization"
+  },
+  {
+    "column": "n",
+    "file": "audit_findings_numbers.json",
+    "formatted": "32",
+    "macro_or_cell": "MandPrecN",
+    "raw_value": 32,
+    "row_key": "precision_mandarinization"
+  },
+  {
+    "column": "estimate",
+    "file": "audit_findings_numbers.json",
+    "formatted": "4.2",
+    "macro_or_cell": "MandRecallW",
+    "raw_value": 0.0420975565113938,
+    "row_key": "recall_mandarinization_weighted"
+  },
+  {
+    "column": "ci",
+    "file": "audit_findings_numbers.json",
+    "formatted": "[2.9, 6.4]",
+    "macro_or_cell": "MandRecallWCI",
+    "raw_value": 0.028846883777423518,
+    "row_key": "recall_mandarinization_weighted"
+  },
+  {
+    "column": "note:misses_ctrl",
+    "file": "audit_findings_numbers.json",
+    "formatted": "18",
+    "macro_or_cell": "MissesCtrl",
+    "raw_value": 18,
+    "row_key": "recall_mandarinization_weighted"
+  },
+  {
+    "column": "B",
+    "file": "stats_summary.json",
+    "formatted": "10000",
+    "macro_or_cell": "NBoot",
+    "raw_value": 10000,
+    "row_key": "B"
+  },
+  {
+    "column": "note:design_n",
+    "file": "audit_findings_numbers.json",
+    "formatted": "40",
+    "macro_or_cell": "NCtrlDesign",
+    "raw_value": 40,
+    "row_key": "recall_mandarinization_weighted"
+  },
+  {
+    "column": "note:N_ctrl_pop",
+    "file": "audit_findings_numbers.json",
+    "formatted": "1163",
+    "macro_or_cell": "NCtrlPop",
+    "raw_value": 1163,
+    "row_key": "recall_mandarinization_weighted"
+  },
+  {
+    "column": "k",
+    "file": "audit_findings_numbers.json",
+    "formatted": "1",
+    "macro_or_cell": "NRefErrorOnly",
+    "raw_value": 1,
+    "row_key": "n_ref_error_only"
+  },
+  {
+    "column": "n",
+    "file": "stats_summary.json",
+    "formatted": "8373",
+    "macro_or_cell": "NUtt",
+    "raw_value": 8373,
+    "row_key": "n"
+  },
+  {
+    "column": "cmp",
+    "file": "stats_table.csv",
+    "formatted": "$<1$",
+    "macro_or_cell": "ORcmp",
+    "raw_value": 0.8429488467402066,
+    "row_key": "logit_OR_has_dialect_P0"
+  },
+  {
+    "column": "estimate",
+    "file": "stats_table.csv",
+    "formatted": "0.843",
+    "macro_or_cell": "ORdialect",
+    "raw_value": "0.8429488467402066",
+    "row_key": "logit_OR_has_dialect_P0"
+  },
+  {
+    "column": "ci",
+    "file": "stats_table.csv",
+    "formatted": "[0.724, 0.981]",
+    "macro_or_cell": "ORdialectCI",
+    "raw_value": "0.7241719090413821",
+    "row_key": "logit_OR_has_dialect_P0"
+  },
+  {
+    "column": "p_holm",
+    "file": "stats_table.csv",
+    "formatted": "0.0534",
+    "macro_or_cell": "ORpHolm",
+    "raw_value": "0.0534",
+    "row_key": "logit_OR_has_dialect_P0"
+  },
+  {
+    "column": "estimate",
+    "file": "audit_findings_numbers.json",
+    "formatted": "8.8",
+    "macro_or_cell": "OverPrec",
+    "raw_value": 0.08823529411764706,
+    "row_key": "precision_over_dialect"
+  },
+  {
+    "column": "ci",
+    "file": "audit_findings_numbers.json",
+    "formatted": "[3.0, 23.0]",
+    "macro_or_cell": "OverPrecCI",
+    "raw_value": 0.03046594367464854,
+    "row_key": "precision_over_dialect"
+  },
+  {
+    "column": "k",
+    "file": "audit_findings_numbers.json",
+    "formatted": "3",
+    "macro_or_cell": "OverPrecK",
+    "raw_value": 3,
+    "row_key": "precision_over_dialect"
+  },
+  {
+    "column": "n",
+    "file": "audit_findings_numbers.json",
+    "formatted": "34",
+    "macro_or_cell": "OverPrecN",
+    "raw_value": 34,
+    "row_key": "precision_over_dialect"
+  },
+  {
+    "column": "estimate",
+    "file": "audit_findings_numbers.json",
+    "formatted": "95.0\\% [76.4, 99.1]",
+    "macro_or_cell": "tab_audit:low:rate",
+    "raw_value": "95.0",
+    "row_key": "control_lowconf_error_rate"
+  },
+  {
+    "column": "estimate",
+    "file": "audit_findings_numbers.json",
+    "formatted": "71.9\\% [54.6, 84.4]",
+    "macro_or_cell": "tab_audit:mand:prec",
+    "raw_value": "71.9",
+    "row_key": "precision_mandarinization"
+  },
+  {
+    "column": "estimate",
+    "file": "audit_findings_numbers.json",
+    "formatted": "4.2\\% [2.9, 6.4]",
+    "macro_or_cell": "tab_audit:mand:rec",
+    "raw_value": "4.2",
+    "row_key": "recall_mandarinization_weighted"
+  },
+  {
+    "column": "estimate",
+    "file": "audit_findings_numbers.json",
+    "formatted": "8.8\\% [3.0, 23.0]",
+    "macro_or_cell": "tab_audit:over:prec",
+    "raw_value": "8.8",
+    "row_key": "precision_over_dialect"
+  },
+  {
+    "column": "All:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "0.123 [0.119, 0.127]",
+    "macro_or_cell": "tab_calib:ece3_vote_P0:All",
+    "raw_value": "0.12295982873522021",
+    "row_key": "ece3_vote_P0"
+  },
+  {
+    "column": "Easy:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "0.11 [0.106, 0.114]",
+    "macro_or_cell": "tab_calib:ece3_vote_P0:Easy",
+    "raw_value": "0.10989216287064879",
+    "row_key": "ece3_vote_P0"
+  },
+  {
+    "column": "Hard:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "0.188 [0.176, 0.201]",
+    "macro_or_cell": "tab_calib:ece3_vote_P0:Hard",
+    "raw_value": "0.18849529956896538",
+    "row_key": "ece3_vote_P0"
+  },
+  {
+    "column": "All:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "0.14 [0.136, 0.144]",
+    "macro_or_cell": "tab_calib:ece3_vote_S2:All",
+    "raw_value": "0.1403355524901469",
+    "row_key": "ece3_vote_S2"
+  },
+  {
+    "column": "Easy:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "0.128 [0.124, 0.133]",
+    "macro_or_cell": "tab_calib:ece3_vote_S2:Easy",
+    "raw_value": "0.12839463200114615",
+    "row_key": "ece3_vote_S2"
+  },
+  {
+    "column": "Hard:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "0.2 [0.188, 0.213]",
+    "macro_or_cell": "tab_calib:ece3_vote_S2:Hard",
+    "raw_value": "0.200220298132184",
+    "row_key": "ece3_vote_S2"
+  },
+  {
+    "column": "All:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "-0.582 [-0.6, -0.564]",
+    "macro_or_cell": "tab_calib:spearman_conf_cer_vote_P0:All",
+    "raw_value": "-0.5819661724988878",
+    "row_key": "spearman_conf_cer_vote_P0"
+  },
+  {
+    "column": "Easy:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "-0.575 [-0.594, -0.556]",
+    "macro_or_cell": "tab_calib:spearman_conf_cer_vote_P0:Easy",
+    "raw_value": "-0.5747282898487831",
+    "row_key": "spearman_conf_cer_vote_P0"
+  },
+  {
+    "column": "Hard:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "-0.562 [-0.605, -0.516]",
+    "macro_or_cell": "tab_calib:spearman_conf_cer_vote_P0:Hard",
+    "raw_value": "-0.5619926621747037",
+    "row_key": "spearman_conf_cer_vote_P0"
+  },
+  {
+    "column": "All:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "-0.598 [-0.615, -0.58]",
+    "macro_or_cell": "tab_calib:spearman_conf_cer_vote_S2:All",
+    "raw_value": "-0.5980233388497009",
+    "row_key": "spearman_conf_cer_vote_S2"
+  },
+  {
+    "column": "Easy:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "-0.597 [-0.616, -0.578]",
+    "macro_or_cell": "tab_calib:spearman_conf_cer_vote_S2:Easy",
+    "raw_value": "-0.5971040601193558",
+    "row_key": "spearman_conf_cer_vote_S2"
+  },
+  {
+    "column": "Hard:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "-0.563 [-0.605, -0.518]",
+    "macro_or_cell": "tab_calib:spearman_conf_cer_vote_S2:Hard",
+    "raw_value": "-0.5626115999619835",
+    "row_key": "spearman_conf_cer_vote_S2"
+  },
+  {
+    "column": "All:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "0.147 [0.143, 0.152]",
+    "macro_or_cell": "tab_cer:firered:All",
+    "raw_value": "0.1474388574298653",
+    "row_key": "cer_firered"
+  },
+  {
+    "column": "Easy:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "0.134 [0.130, 0.138]",
+    "macro_or_cell": "tab_cer:firered:Easy",
+    "raw_value": "0.1336938644663117",
+    "row_key": "cer_firered"
+  },
+  {
+    "column": "Hard:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "0.241 [0.224, 0.258]",
+    "macro_or_cell": "tab_cer:firered:Hard",
+    "raw_value": "0.2409303501453672",
+    "row_key": "cer_firered"
+  },
+  {
+    "column": "All:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "0.134 [0.130, 0.138]",
+    "macro_or_cell": "tab_cer:qwen3asr:All",
+    "raw_value": "0.13398303643035944",
+    "row_key": "cer_qwen3asr"
+  },
+  {
+    "column": "Easy:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "0.121 [0.118, 0.125]",
+    "macro_or_cell": "tab_cer:qwen3asr:Easy",
+    "raw_value": "0.1213261598788318",
+    "row_key": "cer_qwen3asr"
+  },
+  {
+    "column": "Hard:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "0.220 [0.205, 0.235]",
+    "macro_or_cell": "tab_cer:qwen3asr:Hard",
+    "raw_value": "0.22007331563645557",
+    "row_key": "cer_qwen3asr"
+  },
+  {
+    "column": "All:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "0.166 [0.162, 0.169]",
+    "macro_or_cell": "tab_cer:sensevoice:All",
+    "raw_value": "0.16561758248880032",
+    "row_key": "cer_sensevoice"
+  },
+  {
+    "column": "Easy:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "0.155 [0.151, 0.159]",
+    "macro_or_cell": "tab_cer:sensevoice:Easy",
+    "raw_value": "0.15484254639050726",
+    "row_key": "cer_sensevoice"
+  },
+  {
+    "column": "Hard:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "0.239 [0.226, 0.252]",
+    "macro_or_cell": "tab_cer:sensevoice:Hard",
+    "raw_value": "0.23890784982935154",
+    "row_key": "cer_sensevoice"
+  },
+  {
+    "column": "All:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "0.154 [0.150, 0.158]",
+    "macro_or_cell": "tab_cer:vote_P0:All",
+    "raw_value": "0.1540979091225768",
+    "row_key": "cer_vote_P0"
+  },
+  {
+    "column": "Easy:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "0.139 [0.136, 0.143]",
+    "macro_or_cell": "tab_cer:vote_P0:Easy",
+    "raw_value": "0.13935271652775066",
+    "row_key": "cer_vote_P0"
+  },
+  {
+    "column": "Hard:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "0.254 [0.238, 0.272]",
+    "macro_or_cell": "tab_cer:vote_P0:Hard",
+    "raw_value": "0.25439261787384654",
+    "row_key": "cer_vote_P0"
+  },
+  {
+    "column": "All:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "0.170 [0.166, 0.174]",
+    "macro_or_cell": "tab_cer:vote_S2:All",
+    "raw_value": "0.16959519122495767",
+    "row_key": "cer_vote_S2"
+  },
+  {
+    "column": "Easy:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "0.157 [0.154, 0.161]",
+    "macro_or_cell": "tab_cer:vote_S2:Easy",
+    "raw_value": "0.15729564482108177",
+    "row_key": "cer_vote_S2"
+  },
+  {
+    "column": "Hard:estimate_ci",
+    "file": "stats_table.csv",
+    "formatted": "0.253 [0.238, 0.269]",
+    "macro_or_cell": "tab_cer:vote_S2:Hard",
+    "raw_value": "0.2532549614460877",
+    "row_key": "cer_vote_S2"
+  },
+  {
+    "column": "ci",
+    "file": "stats_table.csv",
+    "formatted": "[-0.017, -0.014]",
+    "macro_or_cell": "tab_primary:delta_cer_P0_minus_S2:ci",
+    "raw_value": "-0.017374424330247648",
+    "row_key": "delta_cer_P0_minus_S2"
+  },
+  {
+    "column": "estimate",
+    "file": "stats_table.csv",
+    "formatted": "-0.015",
+    "macro_or_cell": "tab_primary:delta_cer_P0_minus_S2:estimate",
+    "raw_value": "-0.015497282102380883",
+    "row_key": "delta_cer_P0_minus_S2"
+  },
+  {
+    "column": "ci",
+    "file": "stats_table.csv",
+    "formatted": "[+0.018, +0.022]",
+    "macro_or_cell": "tab_primary:delta_cer_P0_minus_qwen3asr:ci",
+    "raw_value": "0.017896625983792262",
+    "row_key": "delta_cer_P0_minus_qwen3asr"
+  },
+  {
+    "column": "estimate",
+    "file": "stats_table.csv",
+    "formatted": "+0.020",
+    "macro_or_cell": "tab_primary:delta_cer_P0_minus_qwen3asr:estimate",
+    "raw_value": "0.020114872692217345",
+    "row_key": "delta_cer_P0_minus_qwen3asr"
+  },
+  {
+    "column": "ci",
+    "file": "stats_table.csv",
+    "formatted": "[0.00324, 0.0221]",
+    "macro_or_cell": "tab_primary:delta_ece_has_minus_no:ci",
+    "raw_value": "0.003235082443877705",
+    "row_key": "delta_ece_has_minus_no"
+  },
+  {
+    "column": "estimate",
+    "file": "stats_table.csv",
+    "formatted": "0.0125",
+    "macro_or_cell": "tab_primary:delta_ece_has_minus_no:estimate",
+    "raw_value": "0.012496469155197254",
+    "row_key": "delta_ece_has_minus_no"
+  },
+  {
+    "column": "ci",
+    "file": "stats_table.csv",
+    "formatted": "[0.769, 5.93]",
+    "macro_or_cell": "tab_primary:delta_pp_pass_0.9:ci",
+    "raw_value": "0.7686291413201362",
+    "row_key": "delta_pp_pass_0.9"
+  },
+  {
+    "column": "estimate",
+    "file": "stats_table.csv",
+    "formatted": "3.36",
+    "macro_or_cell": "tab_primary:delta_pp_pass_0.9:estimate",
+    "raw_value": "3.360139283254282",
+    "row_key": "delta_pp_pass_0.9"
+  },
+  {
+    "column": "ci",
+    "file": "stats_table.csv",
+    "formatted": "[0.00689, 0.0293]",
+    "macro_or_cell": "tab_primary:delta_retention_P0_minus_S2:ci",
+    "raw_value": "0.006890736667201631",
+    "row_key": "delta_retention_P0_minus_S2"
+  },
+  {
+    "column": "estimate",
+    "file": "stats_table.csv",
+    "formatted": "0.0181",
+    "macro_or_cell": "tab_primary:delta_retention_P0_minus_S2:estimate",
+    "raw_value": "0.018120805369127524",
+    "row_key": "delta_retention_P0_minus_S2"
+  },
+  {
+    "column": "ci",
+    "file": "stats_table.csv",
+    "formatted": "[0.724, 0.981]",
+    "macro_or_cell": "tab_primary:logit_OR_has_dialect_P0:ci",
+    "raw_value": "0.7241719090413821",
+    "row_key": "logit_OR_has_dialect_P0"
+  },
+  {
+    "column": "estimate",
+    "file": "stats_table.csv",
+    "formatted": "0.843",
+    "macro_or_cell": "tab_primary:logit_OR_has_dialect_P0:estimate",
+    "raw_value": "0.8429488467402066",
+    "row_key": "logit_OR_has_dialect_P0"
+  }
+]

@@ -1,0 +1,47 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{times,latexsym}
+\usepackage{url}
+\usepackage[T1]{fontenc}
+% acceptedWithA keeps the author block and turns off submission line numbers.
+% The default tacl2021v1 mode prints "Anonymous TACL submission".
+\IfFileExists{tacl2021v1.sty}{}{\errmessage{Run scripts/fetch_tacl_style.sh}}
+\usepackage[acceptedWithA]{tacl2021v1}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{xspace}
+\IfFileExists{CJKutf8.sty}{\usepackage{CJKutf8}\newcommand{\zh}[1]{\begin{CJK}{UTF8}{gbsn}#1\end{CJK}}}{\newcommand{\zh}[1]{\texttt{[zh]}}}
+\newif\ifdraft
+\drafttrue
+\ifdraft
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\else
+\newcommand{\todo}[1]{}
+\GenericWarning{wsc-audit}{Draft TODOs stripped in final mode}
+\fi
+\input{numbers}
+
+\title{Who Gets Filtered Out? Auditing Automatic Labels in a Large Sichuanese Speech Corpus}
+\author{Hanqi Yang}
+\date{}
+
+\begin{document}
+\maketitle
+
+\input{sections/abstract}
+\input{sections/introduction}
+\input{sections/related_work}
+\input{sections/data}
+\input{sections/method}
+\input{sections/results}
+\input{sections/audit}
+\input{sections/discussion}
+\input{sections/limitations}
+\input{sections/ethics}
+\input{sections/conclusion}
+
+\bibliographystyle{acl_natbib}
+\bibliography{refs}
+
+\end{document}

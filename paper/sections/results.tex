@@ -1,0 +1,27 @@
+% PLACEHOLDER — outline only; no results prose yet
+% target words: 800
+\section{Results}
+
+\begin{table}[t]
+\centering
+\small
+\input{tables/tab_cer}
+\caption{Micro CER by system and split, with percentile bootstrap CI.}
+\label{tab:cer}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\input{tables/tab_primary}
+\caption{Primary family on the All split. \todo{CER ordering, $\Delta$CER, $\Delta$ECE, filter: dialect-marked utterances pass \FilterThr{} \FilterPassWord{} often unadjusted ($\Delta$pp=\DeltaPP), OR after duration and split \ORcmp, \HolmClause}.}
+\label{tab:primary}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\input{tables/tab_calib}
+\caption{Calibration of vote confidence (ECE and Spearman $\rho$).}
+\label{tab:calib}
+\end{table}

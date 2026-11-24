@@ -27,6 +27,7 @@ SUBCOMMANDS = (
     "audit",
     "audit-merge",
     "audit-report",
+    "paper-tables",
     "report",
 )
 
@@ -201,6 +202,15 @@ def build_parser() -> argparse.ArgumentParser:
     p_arep.add_argument("--audit-dir", type=Path, default=None)
     p_arep.add_argument("--stats-table", type=Path, default=None)
     p_arep.add_argument("--out-dir", type=Path, default=None)
+
+    p_pt = sub.add_parser("paper-tables", help="Generate TACL tables and number macros (read-only)")
+    _add_common(p_pt)
+    p_pt.add_argument("--stats-table", type=Path, default=None)
+    p_pt.add_argument("--stats-summary", type=Path, default=None)
+    p_pt.add_argument("--results-dir", type=Path, default=_REPO_ROOT / "results")
+    p_pt.add_argument("--paper-dir", type=Path, default=_REPO_ROOT / "paper")
+    p_pt.add_argument("--snapshot", action="store_true", help="Copy stats files into results/frozen/")
+    p_pt.add_argument("--check", action="store_true", help="Regenerate to a temp dir and diff against paper/")
 
     p_report = sub.add_parser("report", help="Comparison tables and provenance")
     _add_common(p_report)
@@ -455,6 +465,10 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_audit_merge(args, cfg)
     if args.command == "audit-report":
         return cmd_audit_report(args, cfg)
+    if args.command == "paper-tables":
+        from wscaudit.paper_tables import cmd_paper_tables
+
+        return cmd_paper_tables(args, cfg)
     return _stub(args.command)
 
 

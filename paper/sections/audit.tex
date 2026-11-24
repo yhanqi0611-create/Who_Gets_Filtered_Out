@@ -1,0 +1,23 @@
+% PLACEHOLDER — outline only; no results prose yet
+% target words: 700
+\section{Human audit}
+
+\begin{table}[t]
+\centering
+\small
+\input{tables/tab_audit}
+\caption{Round-one audit of automatic detectors. Precision CIs are Wilson; recall CIs are bootstrap. Over-dialect is unreliable.}
+\label{tab:audit}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/audit_precision_recall.pdf}
+\caption{Mandarinization precision and sampling-weighted recall.}
+\label{fig:audit}
+\end{figure}
+
+\todo{precise but narrow: precision \MandPrec{} Wilson \MandPrecCI; weighted recall \MandRecallW{} bootstrap \MandRecallWCI}
+\todo{over-dialect unreliable}
+\todo{low-confidence controls \LowconfK/\LowconfN{} (mostly homophone/other)}
+\todo{qualitative examples via \zh{}; pick from audit\_findings.md}

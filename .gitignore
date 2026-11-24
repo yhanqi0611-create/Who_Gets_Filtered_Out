@@ -14,3 +14,14 @@ logs/
 .ipynb_checkpoints/
 third_party/FireRedASR/
 .DS_Store
+paper/*.aux
+paper/*.log
+paper/*.bbl
+paper/*.blg
+paper/*.fls
+paper/*.fdb_latexmk
+paper/*.out
+paper/*.synctex.gz
+paper/main.pdf
+paper/_kit/
+paper_overleaf.zip
